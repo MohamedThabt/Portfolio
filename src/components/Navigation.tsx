@@ -1,12 +1,4 @@
-import {
-  Home,
-  FileText,
-  Github,
-  Linkedin,
-  User,
-  Briefcase,
-  Mail,
-} from "lucide-react";
+import { Home, FileText, Github, Linkedin } from "lucide-react";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import ThemeToggle from "./ThemeToggle";
@@ -23,14 +15,7 @@ const Navigation = () => {
     };
 
     const updateActiveSection = () => {
-      const sections = [
-        "about",
-        "skills",
-        "certificates",
-        "projects",
-        "experience",
-        "contact",
-      ];
+      const sections = ["about", "skills", "certificates", "experience"];
       const scrollPosition = window.scrollY + 100; // Offset for better detection
 
       // Check if we're at the top of the page
@@ -48,14 +33,8 @@ const Navigation = () => {
           const elementBottom = elementTop + rect.height;
 
           if (scrollPosition >= elementTop && scrollPosition < elementBottom) {
-            // Map sections to their corresponding nav items
-            if (sectionId === "skills" || sectionId === "certificates") {
-              setActiveSection("about"); // Skills and certificates are about the person
-            } else if (sectionId === "experience") {
-              setActiveSection("projects"); // Experience is related to projects/work
-            } else {
-              setActiveSection(sectionId);
-            }
+            // All sections now map to home since we removed about
+            setActiveSection("");
             return;
           }
         }
@@ -99,21 +78,7 @@ const Navigation = () => {
       icon: <Home className="h-5 w-5" />,
       label: "Home",
     },
-    {
-      href: "/#about",
-      icon: <User className="h-5 w-5" />,
-      label: "About",
-    },
-    {
-      href: "/#projects",
-      icon: <Briefcase className="h-5 w-5" />,
-      label: "Projects",
-    },
-    {
-      href: "/#contact",
-      icon: <Mail className="h-5 w-5" />,
-      label: "Contact",
-    },
+
     {
       href: "https://mohamedthabt.github.io/",
       icon: <FileText className="h-5 w-5" />,
@@ -161,22 +126,23 @@ const Navigation = () => {
       animate={{ y: 0, opacity: 1, scale: 1, x: "-50%" }}
       transition={{
         type: "spring",
-        stiffness: 300,
-        damping: 30,
-        delay: 0.2,
+        stiffness: 400,
+        damping: 35,
+        mass: 0.5,
+        delay: 0.1,
       }}
     >
       <motion.div
-        className="flex items-center gap-2 bg-background/95 backdrop-blur-lg border border-border/30 rounded-full px-2 py-2 shadow-2xl"
+        className="flex items-center gap-1 md:gap-2 bg-background/95 backdrop-blur-xl border border-border/30 rounded-full px-2 py-2 shadow-2xl hw-accelerated"
         whileHover={{
-          scale: 1.02,
-          y: -2,
+          scale: 1.03,
+          y: -3,
         }}
         transition={{
           type: "spring",
-          stiffness: 400,
-          damping: 20,
-          mass: 0.6,
+          stiffness: 500,
+          damping: 25,
+          mass: 0.4,
         }}
       >
         {navItems.map((item, index) => (
@@ -218,7 +184,7 @@ const Navigation = () => {
                 }
               }}
               className={`
-                group relative flex items-center justify-center w-12 h-12 rounded-full transition-all duration-300 isolation-auto
+                group relative flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-full transition-all duration-200 isolation-auto hw-accelerated
                 ${
                   isActive(item.href)
                     ? "text-accent-foreground [&>*]:!text-accent-foreground"
@@ -227,28 +193,34 @@ const Navigation = () => {
               `}
               title={item.label}
               whileHover={{
-                scale: 1.1,
-                y: -2,
+                scale: 1.15,
+                y: -3,
               }}
               whileTap={{
-                scale: 0.95,
+                scale: 0.9,
               }}
               transition={{
                 type: "spring",
-                stiffness: 600,
-                damping: 15,
-                mass: 0.5,
+                stiffness: 700,
+                damping: 20,
+                mass: 0.3,
               }}
             >
               <AnimatePresence>
                 {isActive(item.href) && (
                   <motion.div
                     layoutId="activeBackground"
-                    className="absolute inset-0 bg-accent rounded-full z-0"
+                    className="absolute inset-0 bg-accent rounded-full z-0 hw-accelerated"
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
                     exit={{ scale: 0 }}
-                    transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                    transition={{
+                      type: "spring",
+                      stiffness: 600,
+                      damping: 35,
+                      mass: 0.4,
+                      duration: 0.15,
+                    }}
                   />
                 )}
               </AnimatePresence>
@@ -273,19 +245,19 @@ const Navigation = () => {
           }}
         >
           <motion.div
-            className="group relative flex items-center justify-center w-12 h-12 rounded-full isolate"
+            className="group relative flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-full isolate hw-accelerated"
             whileHover={{
-              scale: 1.1,
-              y: -2,
+              scale: 1.15,
+              y: -3,
             }}
             whileTap={{
-              scale: 0.95,
+              scale: 0.9,
             }}
             transition={{
               type: "spring",
-              stiffness: 600,
-              damping: 15,
-              mass: 0.5,
+              stiffness: 700,
+              damping: 20,
+              mass: 0.3,
             }}
           >
             <div className="relative z-20">

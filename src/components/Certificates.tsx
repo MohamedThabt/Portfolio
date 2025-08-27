@@ -32,7 +32,9 @@ const Certificates = () => {
       issuer: "Cisco Networking Academy",
       date: "2023",
       credentialId: "CISCO-CYBERSEC-2023",
-      image: "/certificates/Introduction to Cyber Security.png",
+      image: `${
+        import.meta.env.BASE_URL
+      }certificates/Introduction to Cyber Security.png`,
       skills: ["Cybersecurity", "Network Security", "Threat Analysis"],
       status: "Active",
       level: "Foundation",
@@ -54,7 +56,9 @@ const Certificates = () => {
       issuer: "Cybrary",
       date: "Jun 2024",
       credentialId: "CC-dfa8508d-be2a-40bb-8226-52c686994dfd",
-      image: "/certificates/CompTIA Network+ (N10-008).png",
+      image: `${
+        import.meta.env.BASE_URL
+      }certificates/CompTIA Network+ (N10-008).png`,
       skills: [
         "Network Administration",
         "TCP/IP",
@@ -82,7 +86,9 @@ const Certificates = () => {
       issuer: "Professional Training Institute",
       date: "2023",
       credentialId: "CLOUD-VIRT-2023",
-      image: "/certificates/Cloud and Virtualization Concepts.png",
+      image: `${
+        import.meta.env.BASE_URL
+      }certificates/Cloud and Virtualization Concepts.png`,
       skills: [
         "Cloud Computing",
         "Virtualization",
@@ -130,14 +136,16 @@ const Certificates = () => {
         opts={{
           align: "start",
           loop: true,
+          skipSnaps: false,
+          dragFree: true,
         }}
-        className="w-full"
+        className="w-full relative"
       >
         <CarouselContent className="-ml-2 md:-ml-4">
           {certificates.map((certificate, index) => (
             <CarouselItem
               key={certificate.id}
-              className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3"
+              className="pl-2 md:pl-4 basis-[85%] sm:basis-1/2 md:basis-1/2 lg:basis-1/3"
             >
               <Card
                 className="glass-card h-full border-border/30 hover:border-accent/50 transition-all duration-500 group hover:glow-soft hover:scale-105 transform animate-fade-in"
@@ -332,8 +340,8 @@ const Certificates = () => {
             </CarouselItem>
           ))}
         </CarouselContent>
-        <CarouselPrevious className="glass-card border-border/30 hover:border-accent/50" />
-        <CarouselNext className="glass-card border-border/30 hover:border-accent/50" />
+        <CarouselPrevious className="glass-card border-border/30 hover:border-accent/50 bg-background/90 backdrop-blur-sm hover:bg-accent/10" />
+        <CarouselNext className="glass-card border-border/30 hover:border-accent/50 bg-background/90 backdrop-blur-sm hover:bg-accent/10" />
       </Carousel>
 
       {/* Enhanced Summary Stats */}
