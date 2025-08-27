@@ -87,7 +87,7 @@ I'm always excited to discuss new opportunities, collaborate on interesting proj
 
 **Get in Touch:**
 
-- 📧 **Email**: [mohamedthabt@gmail.com](mailto:mohamedthabt@gmail.com)
+- 📧 **Email**: [mohamedthabetthabet36@gmail.com](mailto:mohamedthabetthabet36@gmail.com)
 - 💼 **LinkedIn**: [Connect with me](https://www.linkedin.com/in/mohamed--thabet/)
 - 🐙 **GitHub**: [Check out my work](https://github.com/MohamedThabt)
 - 🌐 **Portfolio**: [View my portfolio](https://mohamedthabt.github.io/Portfolio/)

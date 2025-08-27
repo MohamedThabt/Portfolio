@@ -202,7 +202,7 @@ const Hero = () => {
             className="glass-card hover:glow-soft p-4 rounded-full"
             asChild
           >
-            <a href="mailto:mohamed.thabet@example.com">
+            <a href="mailto:mohamedthabetthabet36@gmail.com">
               <Mail className="h-6 w-6" />
             </a>
           </Button>
