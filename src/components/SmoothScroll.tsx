@@ -18,16 +18,6 @@ const SmoothScroll = ({ children }: SmoothScrollProps) => {
         prefersReducedMotion
           ? Math.min(1, 1.001 - Math.pow(2, -8 * t))
           : Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      direction: "vertical",
-      gestureDirection: "vertical",
-      smooth: !prefersReducedMotion,
-      mouseMultiplier: 1,
-      smoothTouch: true,
-      touchMultiplier: 1.5,
-      infinite: false,
-      syncTouch: true,
-      syncTouchLerp: 0.1,
-      __experimental__naiveDimensions: false,
     });
 
     function raf(time: number) {
