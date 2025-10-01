@@ -152,7 +152,7 @@ const Hero = () => {
             asChild
           >
             <a
-              href="/Mohamed Thabet CV.pdf"
+              href="https://drive.google.com/file/d/1_ab8D-YieGBzIWy-riT4XXrQ7gChgm5s/view?usp=sharing"
               download="Mohamed Thabet CV.pdf"
               target="_blank"
               rel="noopener noreferrer"
