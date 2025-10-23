@@ -6,7 +6,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { AnimatePresence } from "framer-motion";
 import SmoothScroll from "@/components/SmoothScroll";
-import VisitorCounter from "@/components/VisitorCounter";
 import Index from "./pages/Index";
 
 const queryClient = new QueryClient();
@@ -18,7 +17,6 @@ const App = () => (
         <SmoothScroll>
           <Toaster />
           <Sonner />
-          <VisitorCounter />
           <BrowserRouter
             future={{
               v7_startTransition: true,
