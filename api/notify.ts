@@ -30,7 +30,7 @@ export default async function handler(
   }
 
   try {
-    const { userAgent, referrer, timestamp, language } = req.body;
+    const { userAgent, referrer, timestamp, language } = (req.body || {} as any);
 
     // Get IP address
     const ip = req.headers['x-forwarded-for'] || 
@@ -38,10 +38,12 @@ export default async function handler(
                req.socket.remoteAddress || 
                'Unknown';
 
+    const safeTime = timestamp ? new Date(timestamp) : new Date();
+
     const message = `
 🌐 *New Visitor Alert!*
 
-⏰ *Time:* ${new Date(timestamp).toLocaleString()}
+  ⏰ *Time:* ${safeTime.toLocaleString()}
 📱 *User Agent:* ${userAgent || 'Unknown'}
 🔗 *Referrer:* ${referrer || 'Direct'}
 🌍 *Language:* ${language || 'Unknown'}
