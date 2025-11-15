@@ -1,6 +1,24 @@
 // Vercel Serverless Function to send Telegram notifications
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
+interface VisitorData {
+  userAgent?: string;
+  referrer?: string;
+  timestamp?: string;
+  language?: string;
+  screenResolution?: string;
+  viewport?: string;
+  colorDepth?: number;
+  devicePixelRatio?: number;
+  timezone?: string;
+  timezoneOffset?: number;
+  pageUrl?: string;
+  pageTitle?: string;
+  connectionType?: string;
+  platform?: string;
+  isMobile?: boolean;
+}
+
 export default async function handler(
   req: VercelRequest,
   res: VercelResponse
@@ -30,7 +48,23 @@ export default async function handler(
   }
 
   try {
-    const { userAgent, referrer, timestamp, language } = (req.body || {} as any);
+    const { 
+      userAgent, 
+      referrer, 
+      timestamp, 
+      language,
+      screenResolution,
+      viewport,
+      colorDepth,
+      devicePixelRatio,
+      timezone,
+      timezoneOffset,
+      pageUrl,
+      pageTitle,
+      connectionType,
+      platform,
+      isMobile
+    } = (req.body || {}) as VisitorData;
 
     // Get IP address
     const ip = req.headers['x-forwarded-for'] || 
@@ -43,11 +77,26 @@ export default async function handler(
     const message = `
 🌐 *New Visitor Alert!*
 
-  ⏰ *Time:* ${safeTime.toLocaleString()}
-📱 *User Agent:* ${userAgent || 'Unknown'}
-🔗 *Referrer:* ${referrer || 'Direct'}
-🌍 *Language:* ${language || 'Unknown'}
-🖥️ *IP:* ${ip}
+⏰ *Time:* ${safeTime.toLocaleString()}
+🌍 *Location:* ${timezone || 'Unknown'}
+📍 *Page:* ${pageTitle || 'Unknown'}
+🔗 *URL:* ${pageUrl || 'Unknown'}
+
+📱 *Device Info:*
+  • Type: ${isMobile ? '📱 Mobile' : '💻 Desktop'}
+  • Platform: ${platform || 'Unknown'}
+  • Screen: ${screenResolution || 'Unknown'}
+  • Viewport: ${viewport || 'Unknown'}
+  • Pixel Ratio: ${devicePixelRatio || 'Unknown'}
+
+🌐 *Browser Info:*
+  • UA: ${userAgent || 'Unknown'}
+  • Language: ${language || 'Unknown'}
+  • Referrer: ${referrer || 'Direct'}
+  • Connection: ${connectionType || 'Unknown'}
+
+🖥️ *Network:*
+  • IP: ${ip}
     `.trim();
 
     const telegramUrl = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;

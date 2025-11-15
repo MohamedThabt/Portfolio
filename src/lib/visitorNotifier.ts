@@ -13,6 +13,22 @@ export const notifyVisitor = async () => {
       referrer: document.referrer,
       timestamp: new Date().toISOString(),
       language: navigator.language,
+      // Screen & Device Info
+      screenResolution: `${window.screen.width}x${window.screen.height}`,
+      viewport: `${window.innerWidth}x${window.innerHeight}`,
+      colorDepth: window.screen.colorDepth,
+      devicePixelRatio: window.devicePixelRatio,
+      // Location & Time
+      timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+      timezoneOffset: new Date().getTimezoneOffset(),
+      // Page Info
+      pageUrl: window.location.href,
+      pageTitle: document.title,
+      // Connection (if available)
+      connectionType: (navigator as any).connection?.effectiveType || 'unknown',
+      // Platform
+      platform: navigator.platform,
+      isMobile: /Mobile|Android|iPhone/i.test(navigator.userAgent),
     };
 
     // Replace with your actual Vercel function URL after deployment
