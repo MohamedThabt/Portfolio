@@ -14,8 +14,20 @@ const queryClient = new QueryClient();
 
 const App = () => {
   useEffect(() => {
-    // Send visitor notification on first load
-    notifyVisitor();
+    // Wait for document to be fully loaded before sending notification
+    const sendNotification = () => {
+      // Add a small delay to ensure all data is available
+      setTimeout(() => {
+        notifyVisitor();
+      }, 1000);
+    };
+
+    if (document.readyState === 'complete') {
+      sendNotification();
+    } else {
+      window.addEventListener('load', sendNotification);
+      return () => window.removeEventListener('load', sendNotification);
+    }
   }, []);
 
   return (

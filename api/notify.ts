@@ -66,6 +66,9 @@ export default async function handler(
       isMobile
     } = (req.body || {}) as VisitorData;
 
+    // Debug log
+    console.log('Received visitor data:', req.body);
+
     // Get IP address
     const ip = req.headers['x-forwarded-for'] || 
                req.headers['x-real-ip'] || 

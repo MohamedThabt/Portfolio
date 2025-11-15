@@ -10,7 +10,7 @@ export const notifyVisitor = async () => {
   try {
     const visitorData = {
       userAgent: navigator.userAgent,
-      referrer: document.referrer,
+      referrer: document.referrer || 'Direct',
       timestamp: new Date().toISOString(),
       language: navigator.language,
       // Screen & Device Info
@@ -25,23 +25,31 @@ export const notifyVisitor = async () => {
       pageUrl: window.location.href,
       pageTitle: document.title,
       // Connection (if available)
-      connectionType: (navigator as any).connection?.effectiveType || 'unknown',
-      // Platform
-      platform: navigator.platform,
+      connectionType: (navigator as any).connection?.effectiveType || (navigator as any).connection?.type || 'unknown',
+      // Platform - use userAgentData if available, fallback to platform
+      platform: (navigator as any).userAgentData?.platform || navigator.platform || 'Unknown',
       isMobile: /Mobile|Android|iPhone/i.test(navigator.userAgent),
     };
+
+    console.log('Sending visitor data:', visitorData); // Debug log
 
     // Replace with your actual Vercel function URL after deployment
     // For GitHub Pages deployment, we hardcode the Vercel API URL
     const apiUrl = 'https://portfolio-eight-iota-39.vercel.app/api/notify';
 
-    await fetch(apiUrl, {
+    const response = await fetch(apiUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(visitorData),
     });
+
+    if (!response.ok) {
+      console.error('Failed to send notification:', response.status, response.statusText);
+    } else {
+      console.log('Notification sent successfully');
+    }
 
     // Mark as notified for this session
     sessionStorage.setItem('visitor_notified', 'true');
