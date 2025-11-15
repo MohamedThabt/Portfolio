@@ -77,11 +77,37 @@ export default async function handler(
 
     const safeTime = timestamp ? new Date(timestamp) : new Date();
 
+    // Parse User Agent for better readability
+    const parseUserAgent = (ua: string) => {
+      if (!ua) return 'Unknown';
+      
+      // Extract browser
+      let browser = 'Unknown';
+      if (ua.includes('Chrome/') && !ua.includes('Edg/')) browser = 'Chrome';
+      else if (ua.includes('Edg/')) browser = 'Edge';
+      else if (ua.includes('Firefox/')) browser = 'Firefox';
+      else if (ua.includes('Safari/') && !ua.includes('Chrome/')) browser = 'Safari';
+      else if (ua.includes('Opera/') || ua.includes('OPR/')) browser = 'Opera';
+      
+      // Extract OS
+      let os = 'Unknown';
+      if (ua.includes('Windows NT 10.0')) os = 'Windows 10/11';
+      else if (ua.includes('Windows NT')) os = 'Windows';
+      else if (ua.includes('Mac OS X')) os = 'macOS';
+      else if (ua.includes('Linux')) os = 'Linux';
+      else if (ua.includes('Android')) os = 'Android';
+      else if (ua.includes('iOS') || ua.includes('iPhone') || ua.includes('iPad')) os = 'iOS';
+      
+      return `${browser} on ${os}`;
+    };
+
+    const browserInfo = parseUserAgent(userAgent || '');
+
     const message = `
 🌐 *New Visitor Alert!*
 
 ⏰ *Time:* ${safeTime.toLocaleString()}
-🌍 *Location:* ${timezone || 'Unknown'}
+🌍 *Timezone:* ${timezone || 'Unknown'}
 📍 *Page:* ${pageTitle || 'Unknown'}
 🔗 *URL:* ${pageUrl || 'Unknown'}
 
@@ -93,13 +119,16 @@ export default async function handler(
   • Pixel Ratio: ${devicePixelRatio || 'Unknown'}
 
 🌐 *Browser Info:*
-  • UA: ${userAgent || 'Unknown'}
+  • Browser: ${browserInfo}
   • Language: ${language || 'Unknown'}
-  • Referrer: ${referrer || 'Direct'}
   • Connection: ${connectionType || 'Unknown'}
 
-🖥️ *Network:*
+🔗 *Source:*
+  • Referrer: ${referrer || 'Direct'}
   • IP: ${ip}
+
+📋 *Raw User Agent:*
+${userAgent || 'Unknown'}
     `.trim();
 
     const telegramUrl = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
