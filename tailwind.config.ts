@@ -19,7 +19,20 @@ export default {
 		},
 		extend: {
 			fontFamily: {
-				sans: ['Inter', 'sans-serif'],
+				sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+				display: ['Space Grotesk', 'Inter', 'sans-serif'],
+				mono: ['JetBrains Mono', 'Consolas', 'monospace'],
+			},
+			letterSpacing: {
+				tighter: '-0.04em',
+				tight: '-0.02em',
+				normal: '0',
+				wide: '0.02em',
+			},
+			fontSize: {
+				'display-lg': ['4.5rem', { lineHeight: '1.1', letterSpacing: '-0.02em' }],
+				'display': ['3.5rem', { lineHeight: '1.1', letterSpacing: '-0.02em' }],
+				'display-sm': ['2.5rem', { lineHeight: '1.2', letterSpacing: '-0.01em' }],
 			},
 			colors: {
 				border: 'hsl(var(--border))',
@@ -78,6 +91,13 @@ export default {
 				'glow-primary': 'var(--glow-primary)',
 				'glow-accent': 'var(--glow-accent)',
 				'glow-soft': 'var(--glow-soft)',
+				'card': '0 8px 16px -4px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+			},
+			spacing: {
+				'18': '4.5rem',
+				'22': '5.5rem',
+				'26': '6.5rem',
+				'30': '7.5rem',
 			},
 			borderRadius: {
 				lg: 'var(--radius)',

@@ -16,11 +16,11 @@ const About = () => {
         animate={isInView ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 0.6 }}
       >
-        <h2 className="text-4xl md:text-5xl font-bold mb-6">
+        <h2 className="text-4xl md:text-5xl font-display font-bold mb-6 tracking-tight">
           About <span className="text-gradient">Me</span>
         </h2>
-        <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-          Passionate about creating elegant, efficient, and explainable code
+        <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+          Engineering robust systems with a focus on performance, scalability, and clean architecture
         </p>
       </motion.div>
 
@@ -86,25 +86,23 @@ const About = () => {
           >
             <Card className="glass-card hover:glow-soft transition-all duration-500">
               <div className="p-6">
-                <h3 className="text-2xl font-semibold mb-4 text-gradient">
-                  My Journey
+                <h3 className="text-2xl font-display font-semibold mb-4 text-gradient">
+                  My Approach
                 </h3>
                 <p className="text-muted-foreground leading-relaxed mb-4">
-                  I'm a passionate backend software engineer from Egypt,
-                  specializing in building robust, scalable systems that power
-                  modern applications. My expertise spans from traditional web
-                  frameworks to cutting-edge AI integrations.
+                  I'm a backend engineer from Egypt, specializing in building scalable APIs, 
+                  optimizing database performance, and integrating AI capabilities into production systems.
+                  My work focuses on creating the invisible infrastructure that powers modern applications.
                 </p>
                 <p className="text-muted-foreground leading-relaxed mb-4">
-                  Over the years, I've evolved from web development to
-                  architecting complex AI-powered systems, particularly focusing
-                  on Retrieval-Augmented Generation (RAG) architectures that bring
-                  intelligence to data.
+                  With expertise in Laravel, Python, and AI frameworks, I've evolved from traditional 
+                  web development to architecting intelligent systems—particularly Retrieval-Augmented 
+                  Generation (RAG) architectures that combine LLMs with domain-specific knowledge.
                 </p>
                 <p className="text-muted-foreground leading-relaxed">
-                  I believe code should be elegant, efficient, and explainable.
-                  Every system I build is designed with performance, scalability,
-                  and security at its core.
+                  I believe great engineering is about trade-offs: choosing the right tool, optimizing 
+                  for the constraints that matter, and writing code that's maintainable by future you. 
+                  Every system I build prioritizes performance, security, and developer experience.
                 </p>
               </div>
             </Card>
@@ -118,7 +116,32 @@ const About = () => {
           >
             <Card className="glass-card hover:glow-soft transition-all duration-500">
             <div className="p-6">
-              <h3 className="text-xl font-semibold mb-4">Core Values</h3>
+              <h3 className="text-xl font-semibold mb-4">Focus Areas</h3>
+              <div className="space-y-3 mb-4">
+                <div className="flex items-start gap-3">
+                  <div className="w-2 h-2 bg-primary rounded-full mt-2"></div>
+                  <div>
+                    <p className="font-medium text-sm">AI-Powered APIs</p>
+                    <p className="text-xs text-muted-foreground">RAG systems, LangChain integration, vector search</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <div className="w-2 h-2 bg-accent rounded-full mt-2"></div>
+                  <div>
+                    <p className="font-medium text-sm">Backend Architecture</p>
+                    <p className="text-xs text-muted-foreground">Laravel, FastAPI, REST/GraphQL APIs, microservices</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <div className="w-2 h-2 bg-primary rounded-full mt-2"></div>
+                  <div>
+                    <p className="font-medium text-sm">Performance Engineering</p>
+                    <p className="text-xs text-muted-foreground">Database optimization, caching strategies, query tuning</p>
+                  </div>
+                </div>
+              </div>
+              
+              <h3 className="text-lg font-semibold mb-3 mt-6">Core Values</h3>
               <div className="flex flex-wrap gap-2">
                 <Badge
                   variant="outline"
@@ -140,21 +163,15 @@ const About = () => {
                 </Badge>
                 <Badge
                   variant="outline"
-                  className="glass border-primary/30 text-primary hover:scale-105 transition-transform duration-200"
+                  className="glass border-accent/30 text-accent hover:scale-105 transition-transform duration-200"
                 >
-                  Clarity
+                  Maintainability
                 </Badge>
                 <Badge
                   variant="outline"
                   className="glass border-accent/30 text-accent hover:scale-105 transition-transform duration-200"
                 >
-                  Innovation
-                </Badge>
-                <Badge
-                  variant="outline"
-                  className="glass border-accent/30 text-accent hover:scale-105 transition-transform duration-200"
-                >
-                  Excellence
+                  DX Focus
                 </Badge>
               </div>
             </div>

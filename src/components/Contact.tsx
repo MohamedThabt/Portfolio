@@ -17,11 +17,11 @@ const Contact = () => {
   return (
     <section className="py-20 px-4 max-w-6xl mx-auto">
       <div className="text-center mb-16 animate-fade-in">
-        <h2 className="text-4xl md:text-5xl font-bold mb-6">
+        <h2 className="text-4xl md:text-5xl font-display font-bold mb-6 tracking-tight">
           Let's <span className="text-gradient">Connect</span>
         </h2>
-        <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-          Ready to discuss your next project? I'd love to hear from you.
+        <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+          Open for remote roles, freelance projects, and technical consulting
         </p>
       </div>
       
@@ -29,12 +29,17 @@ const Contact = () => {
         {/* Contact Info */}
         <Card className="glass-card lg:col-span-1 animate-scale-in stagger-1 hover:glow-soft transition-all duration-500">
           <div className="p-6">
-            <h3 className="text-2xl font-semibold mb-6 text-gradient">Get in Touch</h3>
+            <h3 className="text-2xl font-display font-semibold mb-6 text-gradient">Get in Touch</h3>
             
             <div className="space-y-4">
               <div className="flex items-center gap-4">
-
-
+                <div className="p-3 bg-primary/10 text-primary rounded-lg">
+                  <Mail className="h-5 w-5" />
+                </div>
+                <div>
+                  <p className="font-medium">Response Time</p>
+                  <p className="text-sm text-muted-foreground">Usually within 24-48 hours</p>
+                </div>
               </div>
               
               <div className="flex items-center gap-4">
@@ -43,7 +48,7 @@ const Contact = () => {
                 </div>
                 <div>
                   <p className="font-medium">Location</p>
-                  <p className="text-muted-foreground">Egypt (Remote Available)</p>
+                  <p className="text-sm text-muted-foreground">Egypt · Remote Available</p>
                 </div>
               </div>
               
@@ -53,7 +58,7 @@ const Contact = () => {
                 </div>
                 <div>
                   <p className="font-medium">Availability</p>
-                  <p className="text-muted-foreground">Open for new opportunities</p>
+                  <p className="text-sm text-muted-foreground">Open for new opportunities</p>
                 </div>
               </div>
             </div>
@@ -122,31 +127,31 @@ const Contact = () => {
         {/* Services highlight */}
         <Card className="glass-card lg:col-span-1 animate-scale-in stagger-3 hover:glow-soft transition-all duration-500">
           <div className="p-6">
-            <h3 className="text-xl font-semibold mb-6 text-gradient">Services I Offer</h3>
+            <h3 className="text-xl font-display font-semibold mb-6 text-gradient">What I Can Help With</h3>
             <div className="space-y-3">
               <div className="flex items-center gap-3">
                 <div className="w-2 h-2 bg-primary rounded-full"></div>
-                <span className="text-sm">Backend API Development</span>
+                <span className="text-sm">Laravel & PHP Backend Development</span>
               </div>
               <div className="flex items-center gap-3">
                 <div className="w-2 h-2 bg-accent rounded-full"></div>
-                <span className="text-sm">RAG Systems</span>
+                <span className="text-sm">REST API Design & Implementation</span>
               </div>
               <div className="flex items-center gap-3">
                 <div className="w-2 h-2 bg-primary rounded-full"></div>
-                <span className="text-sm">AI Integrations</span>
+                <span className="text-sm">RAG Systems & AI Integration</span>
               </div>
               <div className="flex items-center gap-3">
                 <div className="w-2 h-2 bg-accent rounded-full"></div>
-                <span className="text-sm">System Architecture</span>
+                <span className="text-sm">Database Architecture & Optimization</span>
               </div>
               <div className="flex items-center gap-3">
                 <div className="w-2 h-2 bg-primary rounded-full"></div>
-                <span className="text-sm">Database Design</span>
+                <span className="text-sm">Real-time Features (WebSockets)</span>
               </div>
               <div className="flex items-center gap-3">
                 <div className="w-2 h-2 bg-accent rounded-full"></div>
-                <span className="text-sm">Performance Optimization</span>
+                <span className="text-sm">Technical Architecture Consulting</span>
               </div>
             </div>
           </div>

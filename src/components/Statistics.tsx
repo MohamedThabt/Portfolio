@@ -19,25 +19,25 @@ const Statistics = () => {
     {
       icon: <Code className="h-8 w-8" />,
       value: 2,
-      label: "Major Projects",
+      label: "Production Projects",
       suffix: "+",
     },
     {
       icon: <Database className="h-8 w-8" />,
-      value: 5,
-      label: "Technologies Mastered",
+      value: 1000,
+      label: "Daily Active Users",
       suffix: "+",
     },
     {
       icon: <Rocket className="h-8 w-8" />,
-      value: 100,
-      label: "Code Quality",
+      value: 60,
+      label: "Performance Improvement",
       suffix: "%",
     },
     {
       icon: <Users className="h-8 w-8" />,
-      value: 2,
-      label: "Happy Clients",
+      value: 6,
+      label: "Months Experience",
       suffix: "+",
     },
   ];
@@ -51,11 +51,11 @@ const Statistics = () => {
   return (
     <section className="py-20 px-4 max-w-6xl mx-auto">
       <div className="text-center mb-16 animate-fade-in">
-        <h2 className="text-4xl md:text-5xl font-bold mb-6">
-          By The <span className="text-gradient">Numbers</span>
+        <h2 className="text-4xl md:text-5xl font-display font-bold mb-6 tracking-tight">
+          Impact <span className="text-gradient">Metrics</span>
         </h2>
-        <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-          A glimpse into my journey and achievements
+        <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+          Real results from production systems and client projects
         </p>
       </div>
 

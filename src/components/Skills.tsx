@@ -97,11 +97,11 @@ const Skills = () => {
   return (
     <section ref={ref} className="py-20 px-4 max-w-6xl mx-auto">
       <div className="text-center mb-16 animate-fade-in">
-        <h2 className="text-4xl md:text-5xl font-bold mb-6">
-          Skills & <span className="text-gradient">Tech Stack</span>
+        <h2 className="text-4xl md:text-5xl font-display font-bold mb-6 tracking-tight">
+          Skills & <span className="text-gradient">Expertise</span>
         </h2>
-        <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-          Technologies and tools I use to build exceptional backend systems
+        <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+          Core technologies and frameworks I use to build production-grade systems
         </p>
       </div>
       
@@ -172,22 +172,22 @@ const Skills = () => {
       <div className="mt-16 text-center">
         <Card className="glass-card max-w-4xl mx-auto animate-slide-up hover:glow-soft transition-all duration-500">
           <div className="p-8">
-            <h3 className="text-2xl font-semibold mb-4 text-gradient">
-              What I'm Currently Exploring
+            <h3 className="text-2xl font-display font-semibold mb-4 text-gradient">
+              Currently Exploring
             </h3>
             <p className="text-muted-foreground leading-relaxed mb-6">
-              Always staying at the forefront of technology, I'm currently diving deeper into 
-              advanced RAG architectures, vector databases optimization, and multi-modal AI systems.
+              Staying ahead of the curve by diving deeper into advanced AI architectures, 
+              vector databases, and distributed systems patterns.
             </p>
             <div className="flex flex-wrap justify-center gap-3">
               <Badge variant="outline" className="glass border-primary/30 text-primary hover:scale-105 transition-transform duration-200">
                 Vector Databases
               </Badge>
               <Badge variant="outline" className="glass border-accent/30 text-accent hover:scale-105 transition-transform duration-200">
-                Multi-modal AI
+                Graph RAG
               </Badge>
               <Badge variant="outline" className="glass border-primary/30 text-primary hover:scale-105 transition-transform duration-200">
-                Graph RAG
+                Multi-Agent Systems
               </Badge>
               <Badge variant="outline" className="glass border-accent/30 text-accent hover:scale-105 transition-transform duration-200">
                 LLM Fine-tuning

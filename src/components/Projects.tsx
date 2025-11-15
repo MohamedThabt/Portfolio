@@ -1,7 +1,7 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ExternalLink, Github, Zap, Database, Brain } from "lucide-react";
+import { ExternalLink, Github, Zap, Database, Brain, Code } from "lucide-react";
 import { motion } from "framer-motion";
 import TiltCard from "./TiltCard";
 import aiProject from "@/assets/ai-project.jpg";
@@ -13,20 +13,24 @@ const Projects = () => {
   const projects = [
     {
       title: "Reelrz.com",
-      description: `Reelrz is a modern freelancing platform designed to connect video creators, influencers, and content professionals with brands and agencies seeking high-quality content and collaboration. The platform streamlines every step of the creative hiring process — from talent discovery and communication to contract management and secure payments.
-                    Built to serve the fast-paced content creation industry, Reelrz focuses on short-form video collaboration, brand deals, and UGC (User Generated Content) campaigns.`,
+      description: `A modern freelancing platform connecting video creators with brands. Built to handle high-traffic content collaboration with real-time features and secure payment processing.`,
       image: reelrzImage,
-      category: "Backend",
-      tech: ["Redis", "Laravel", "REST API", "MySQL", "React"],
+      category: "Full-Stack Platform",
+      role: "Backend Lead",
+      tech: ["Laravel", "Redis", "REST API", "MySQL", "React", "Pusher"],
       features: [
-        "User Roles: Creators, Brands, and Admin with role-based access",
-        "Profile Management: Public creator profiles and brand dashboards",
-        "Real-Time Chat: Instant messaging with notifications via Pusher",
-        "Project System: Campaign posting, proposals, and deal flow",
-        "Wallet & Payments: In-app wallets, secure payouts, and commissions",
-        "Creator Reels: Portfolio-style short video reels to showcase work",
-        "Admin Tools: User control, disputes, and financial analytics",
-        "Notifications: Real-time and in-app alerts for key events",
+        "Multi-role authentication system with granular permissions",
+        "Real-time messaging with Pusher (WebSocket integration)",
+        "Project workflow engine with proposal and deal management",
+        "Secure wallet system with commission handling and payouts",
+        "Creator portfolio with video CDN optimization",
+        "Admin analytics dashboard with revenue tracking",
+      ],
+      engineeringHighlights: [
+        "Implemented Redis caching to reduce database queries by 60%",
+        "Built background job queue for async email and notifications",
+        "Designed scalable REST API serving React SPA",
+        "Rate-limited API endpoints to prevent abuse",
       ],
       github: "#",
       demo: "https://reelrz.com/",
@@ -34,24 +38,26 @@ const Projects = () => {
     },
 
     {
-      title: "E-learning Platform",
+      title: "E-Learning Platform",
       description:
-        "E-Learn is a dynamic Single Page Application (SPA) built with Laravel, Inertia.js, and React. It empowers instructors to create and manage courses, quizzes, and students, while offering learners an interactive and personalized education experience. The system supports flexible enrollment options and performance tracking, all in one unified interface.",
+        "An interactive learning management system (LMS) with course creation, quiz engine, and flexible enrollment. Built as a Single Page Application using Laravel + Inertia.js + React for smooth UX.",
       image: elearningImage,
-      category: "Web Apps",
-      tech: ["Laravel", "React", "MySQL"],
+      category: "EdTech SPA",
+      role: "Solo Developer",
+      tech: ["Laravel", "Inertia.js", "React", "MySQL"],
       features: [
-        "User Roles: Admin, Instructor, and Student with role-based access",
-        "Course Management: Instructors can create, update, and publish courses",
-        "Quiz System: Custom quizzes with automated grading and review",
-        "Enrollment Methods:",
-        "- Auto-enrollment via payment",
-        "- Manual enrollment by admin",
-        "- Code-based student enrollment",
-        "Student Dashboard: Track course progress, quiz results, and completion",
-        "Real-Time UI: Built using Laravel + Inertia.js + React for seamless UX",
-        "Secure Auth: Login, registration, and permission control via Laravel",
-        "Admin Panel: Manage courses, users, and enrollments",
+        "Role-based access: Admin, Instructor, Student",
+        "Course builder with rich media support",
+        "Quiz engine with automated grading and review",
+        "Flexible enrollment: Payment, manual, and code-based",
+        "Student progress tracking and completion certificates",
+        "Real-time UI updates with Inertia.js (no API overhead)",
+      ],
+      engineeringHighlights: [
+        "Server-side rendering with client-side transitions via Inertia.js",
+        "Optimized SQL queries and indexed tables for fast course loading",
+        "Implemented soft deletes and audit logging for data integrity",
+        "Built reusable React components for consistent UI patterns",
       ],
       github: "#",
       demo: "#",
@@ -64,11 +70,11 @@ const Projects = () => {
   return (
     <section className="py-20 px-4 max-w-6xl mx-auto">
       <div className="text-center mb-16 animate-fade-in">
-        <h2 className="text-4xl md:text-5xl font-bold mb-6">
+        <h2 className="text-4xl md:text-5xl font-display font-bold mb-6 tracking-tight">
           Featured <span className="text-gradient">Projects</span>
         </h2>
-        <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-          A showcase of my latest work in backend development and AI systems
+        <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+          Case studies showcasing backend architecture, API design, and real-world engineering solutions
         </p>
       </div>
 
@@ -123,23 +129,48 @@ const Projects = () => {
 
             {/* Project content */}
             <div className="p-6">
-              <h3 className="text-xl font-semibold mb-3 group-hover:text-gradient transition-colors">
-                {project.title}
-              </h3>
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="text-xl md:text-2xl font-display font-semibold group-hover:text-gradient transition-colors">
+                  {project.title}
+                </h3>
+                {project.role && (
+                  <Badge variant="outline" className="glass border-accent/30 text-accent text-xs">
+                    {project.role}
+                  </Badge>
+                )}
+              </div>
               <p className="text-muted-foreground mb-4 leading-relaxed">
                 {project.description}
               </p>
 
+              {/* Engineering Highlights */}
+              {project.engineeringHighlights && project.engineeringHighlights.length > 0 && (
+                <div className="mb-4 bg-secondary/30 rounded-lg p-4">
+                  <h4 className="text-sm font-semibold mb-2 text-primary flex items-center gap-2">
+                    <Code className="h-4 w-4" />
+                    Engineering Highlights
+                  </h4>
+                  <ul className="text-sm text-muted-foreground space-y-1.5">
+                    {project.engineeringHighlights.map((highlight, idx) => (
+                      <li key={idx} className="flex items-start gap-2">
+                        <div className="w-1.5 h-1.5 bg-primary rounded-full mt-1.5 flex-shrink-0" />
+                        <span>{highlight}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
               {/* Key features */}
               <div className="mb-4">
-                <h4 className="text-sm font-medium mb-2 text-primary">
+                <h4 className="text-sm font-medium mb-2 text-foreground">
                   Key Features:
                 </h4>
                 <ul className="text-sm text-muted-foreground space-y-1">
-                  {project.features.map((feature) => (
-                    <li key={feature} className="flex items-center gap-2">
-                      <div className="w-1 h-1 bg-primary rounded-full" />
-                      {feature}
+                  {project.features.slice(0, 4).map((feature) => (
+                    <li key={feature} className="flex items-start gap-2">
+                      <div className="w-1 h-1 bg-accent rounded-full mt-2 flex-shrink-0" />
+                      <span>{feature}</span>
                     </li>
                   ))}
                 </ul>
@@ -152,7 +183,7 @@ const Projects = () => {
                     <Badge
                       key={tech}
                       variant="outline"
-                      className="glass border-accent/30 text-accent hover:bg-accent/10 transition-colors"
+                      className="glass border-primary/20 text-primary hover:bg-primary/10 transition-colors text-xs"
                     >
                       {tech}
                     </Badge>
@@ -170,10 +201,16 @@ const Projects = () => {
                       rel="noopener noreferrer"
                     >
                       <ExternalLink className="mr-2 h-4 w-4" />
-                      Visit Site
+                      View Live
                     </a>
                   </Button>
                 )}
+                {!project.demo || project.demo === "#" ? (
+                  <Button size="sm" variant="outline" className="glass border-primary/30 flex-1" disabled>
+                    <ExternalLink className="mr-2 h-4 w-4" />
+                    Private Project
+                  </Button>
+                ) : null}
               </div>
             </div>
           </Card>

@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Hide default cursor globally */
+* {
+  cursor: none !important;
+}
+
 /* Performance optimizations for smooth animations */
 * {
   will-change: auto;
@@ -203,6 +208,14 @@ body {
     background: var(--gradient-hero);
     font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
       sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: "Space Grotesk", "Inter", sans-serif;
+  }
+
+  code, pre {
+    font-family: "JetBrains Mono", "Consolas", monospace;
   }
 }
 

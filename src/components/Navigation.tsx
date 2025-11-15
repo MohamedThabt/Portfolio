@@ -121,7 +121,7 @@ const Navigation = () => {
 
   return (
     <motion.nav
-      className="fixed bottom-4 md:bottom-6 left-1/2 z-50"
+      className="fixed bottom-4 md:bottom-6 left-1/2 z-50 isolation-auto"
       initial={{ y: 100, opacity: 0, scale: 0.8, x: "-50%" }}
       animate={{ y: 0, opacity: 1, scale: 1, x: "-50%" }}
       transition={{
@@ -133,7 +133,7 @@ const Navigation = () => {
       }}
     >
       <motion.div
-        className="flex items-center gap-1 md:gap-2 bg-background/95 backdrop-blur-xl border border-border/30 rounded-full px-2 py-2 shadow-2xl hw-accelerated"
+        className="flex items-center gap-1 md:gap-2 bg-background/95 backdrop-blur-xl border border-border/30 rounded-full px-2 py-2 shadow-2xl shadow-black/20 hw-accelerated"
         whileHover={{
           scale: 1.03,
           y: -3,

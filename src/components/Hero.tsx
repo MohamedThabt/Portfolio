@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import {
   ArrowDown,
   Download,
@@ -11,13 +12,14 @@ import {
   Cpu,
   Zap,
   Sparkles,
+  Brain,
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { motion, useScroll, useTransform, useMotionValue, useSpring } from "framer-motion";
 
 const Hero = () => {
   const [typedText, setTypedText] = useState("");
-  const fullText = "Crafting the Core of Intelligent Systems";
+  const fullText = "Building AI-Powered Systems That Scale in Production";
   const { scrollY } = useScroll();
   const y = useTransform(scrollY, [0, 500], [0, 150]);
   const opacity = useTransform(scrollY, [0, 300], [1, 0]);
@@ -231,41 +233,62 @@ const Hero = () => {
             </div>
           </div>
 
-          <h2 className="text-2xl md:text-3xl font-light mb-6 leading-relaxed">
+          <h1 className="text-3xl md:text-5xl lg:text-6xl font-display font-bold mb-6 leading-tight tracking-tight">
             Hi, I'm{" "}
-            <span className="text-foreground font-bold">Mohamed Thabet</span> —
-            Backend Engineer
+            <span className="text-gradient">Mohamed Thabet</span>
+          </h1>
+          
+          <h2 className="text-xl md:text-2xl lg:text-3xl font-medium mb-6 leading-relaxed text-muted-foreground">
+            Backend & AI Engineer
           </h2>
-          <h3 className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-3xl mx-auto leading-relaxed font-light">
-            Specializing in Laravel + RAG Architectures
-          </h3>
-          <p className="text-lg text-muted-foreground mb-12 max-w-2xl mx-auto leading-relaxed">
-            Building the invisible infrastructure that powers intelligent
-            applications, from robust APIs to sophisticated AI systems.
+
+          <p className="text-base md:text-lg text-muted-foreground mb-8 max-w-2xl mx-auto leading-relaxed">
+            Specializing in Laravel backends, RAG architectures, and AI-powered APIs.
+            Turning complex requirements into scalable, maintainable systems.
           </p>
+
+          {/* Professional Badges */}
+          <div className="flex flex-wrap justify-center gap-3 mb-12">
+            <Badge variant="outline" className="glass border-primary/30 text-primary px-4 py-2 text-sm font-medium">
+              <Server className="mr-2 h-4 w-4" />
+              Backend Architect
+            </Badge>
+            <Badge variant="outline" className="glass border-accent/30 text-accent px-4 py-2 text-sm font-medium">
+              <Brain className="mr-2 h-4 w-4" />
+              AI Integration
+            </Badge>
+            <Badge variant="outline" className="glass border-primary/30 text-primary px-4 py-2 text-sm font-medium">
+              <Database className="mr-2 h-4 w-4" />
+              Database Design
+            </Badge>
+            <Badge variant="outline" className="glass border-accent/30 text-accent px-4 py-2 text-sm font-medium">
+              <Zap className="mr-2 h-4 w-4" />
+              Performance Tuning
+            </Badge>
+          </div>
         </div>
 
         {/* CTA Buttons */}
         <div
-          className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16 animate-fade-in"
+          className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8 animate-fade-in"
           style={{ animationDelay: "0.3s" }}
         >
           <Button
             size="lg"
-            className="gradient-primary hover:glow-primary smooth-transition px-8 py-6 text-lg font-semibold rounded-full"
+            className="gradient-primary hover:glow-primary smooth-transition px-8 py-6 text-base font-semibold rounded-full"
             asChild
           >
-            <a href="#projects">View Projects</a>
+            <a href="#projects">View Selected Work</a>
           </Button>
           <Button
             variant="outline"
             size="lg"
-            className="glass-card hover:glow-soft px-8 py-6 text-lg font-semibold rounded-full border-primary/30"
+            className="glass-card hover:glow-soft px-8 py-6 text-base font-semibold rounded-full border-primary/30"
             asChild
           >
             <a
               href="https://drive.google.com/file/d/1_ab8D-YieGBzIWy-riT4XXrQ7gChgm5s/view?usp=sharing"
-              download="Mohamed Thabet CV.pdf"
+              download="Mohamed_Thabet_CV.pdf"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -274,6 +297,11 @@ const Hero = () => {
             </a>
           </Button>
         </div>
+
+        {/* Availability Status */}
+        <p className="text-sm text-muted-foreground mb-12 animate-fade-in" style={{ animationDelay: "0.4s" }}>
+          Available for remote roles & freelance projects
+        </p>
 
         {/* Social Links */}
         <div
