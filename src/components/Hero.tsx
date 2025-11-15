@@ -10,9 +10,10 @@ import {
   Code,
   Cpu,
   Zap,
+  Sparkles,
 } from "lucide-react";
 import { useState, useEffect } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, useMotionValue, useSpring } from "framer-motion";
 
 const Hero = () => {
   const [typedText, setTypedText] = useState("");
@@ -35,6 +36,23 @@ const Hero = () => {
     return () => clearInterval(timer);
   }, []);
 
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      mouseX.set(e.clientX / window.innerWidth - 0.5);
+      mouseY.set(e.clientY / window.innerHeight - 0.5);
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, [mouseX, mouseY]);
+
+  const springConfig = { stiffness: 50, damping: 20 };
+  const mouseXSpring = useSpring(mouseX, springConfig);
+  const mouseYSpring = useSpring(mouseY, springConfig);
+
   return (
     <motion.section
       className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20"
@@ -42,6 +60,42 @@ const Hero = () => {
     >
       {/* Pure black background with radial gradient */}
       <div className="absolute inset-0 gradient-radial" />
+      
+      {/* Animated gradient orbs that follow mouse */}
+      <motion.div
+        className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full blur-3xl opacity-20"
+        style={{
+          x: useTransform(mouseXSpring, [-0.5, 0.5], [-100, 100]),
+          y: useTransform(mouseYSpring, [-0.5, 0.5], [-100, 100]),
+          background: "radial-gradient(circle, hsl(var(--primary)) 0%, transparent 70%)",
+        }}
+        animate={{
+          scale: [1, 1.2, 1],
+          opacity: [0.2, 0.3, 0.2],
+        }}
+        transition={{
+          duration: 8,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+      />
+      <motion.div
+        className="absolute bottom-1/4 right-1/4 w-96 h-96 rounded-full blur-3xl opacity-20"
+        style={{
+          x: useTransform(mouseXSpring, [-0.5, 0.5], [100, -100]),
+          y: useTransform(mouseYSpring, [-0.5, 0.5], [100, -100]),
+          background: "radial-gradient(circle, hsl(var(--accent)) 0%, transparent 70%)",
+        }}
+        animate={{
+          scale: [1.2, 1, 1.2],
+          opacity: [0.2, 0.3, 0.2],
+        }}
+        transition={{
+          duration: 10,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+      />
 
       {/* Floating API nodes and backend particles */}
       <div className="absolute inset-0 overflow-hidden">
@@ -67,37 +121,95 @@ const Hero = () => {
           style={{ animationDelay: "4s" }}
         />
 
-        {/* Floating backend icons */}
-        <div className="absolute top-20 left-20 opacity-30">
-          <Server
-            className="h-8 w-8 text-foreground float"
-            style={{ animationDelay: "0.5s" }}
-          />
-        </div>
-        <div className="absolute top-32 right-32 opacity-30">
-          <Database
-            className="h-6 w-6 text-foreground float"
-            style={{ animationDelay: "1.5s" }}
-          />
-        </div>
-        <div className="absolute bottom-40 left-40 opacity-30">
-          <Code
-            className="h-10 w-10 text-foreground float"
-            style={{ animationDelay: "2.5s" }}
-          />
-        </div>
-        <div className="absolute bottom-20 right-20 opacity-30">
-          <Cpu
-            className="h-7 w-7 text-foreground float"
-            style={{ animationDelay: "3.5s" }}
-          />
-        </div>
-        <div className="absolute top-1/2 left-10 opacity-30">
-          <Zap
-            className="h-5 w-5 text-foreground float"
-            style={{ animationDelay: "4.5s" }}
-          />
-        </div>
+        {/* Floating backend icons with enhanced animations */}
+        <motion.div
+          className="absolute top-20 left-20 opacity-30"
+          animate={{
+            y: [0, -20, 0],
+            rotate: [0, 5, -5, 0],
+          }}
+          transition={{
+            duration: 6,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 0.5,
+          }}
+        >
+          <Server className="h-8 w-8 text-foreground" />
+        </motion.div>
+        <motion.div
+          className="absolute top-32 right-32 opacity-30"
+          animate={{
+            y: [0, -15, 0],
+            rotate: [0, -5, 5, 0],
+          }}
+          transition={{
+            duration: 5,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 1.5,
+          }}
+        >
+          <Database className="h-6 w-6 text-foreground" />
+        </motion.div>
+        <motion.div
+          className="absolute bottom-40 left-40 opacity-30"
+          animate={{
+            y: [0, -25, 0],
+            rotate: [0, 10, -10, 0],
+          }}
+          transition={{
+            duration: 7,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 2.5,
+          }}
+        >
+          <Code className="h-10 w-10 text-foreground" />
+        </motion.div>
+        <motion.div
+          className="absolute bottom-20 right-20 opacity-30"
+          animate={{
+            y: [0, -18, 0],
+            rotate: [0, -8, 8, 0],
+          }}
+          transition={{
+            duration: 6.5,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 3.5,
+          }}
+        >
+          <Cpu className="h-7 w-7 text-foreground" />
+        </motion.div>
+        <motion.div
+          className="absolute top-1/2 left-10 opacity-30"
+          animate={{
+            y: [0, -12, 0],
+            scale: [1, 1.2, 1],
+          }}
+          transition={{
+            duration: 4,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 4.5,
+          }}
+        >
+          <Zap className="h-5 w-5 text-foreground" />
+        </motion.div>
+        <motion.div
+          className="absolute top-1/3 right-1/4 opacity-20"
+          animate={{
+            rotate: 360,
+            scale: [1, 1.3, 1],
+          }}
+          transition={{
+            rotate: { duration: 20, repeat: Infinity, ease: "linear" },
+            scale: { duration: 3, repeat: Infinity, ease: "easeInOut" },
+          }}
+        >
+          <Sparkles className="h-6 w-6 text-primary" />
+        </motion.div>
       </div>
 
       {/* Content */}

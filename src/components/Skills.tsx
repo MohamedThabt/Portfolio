@@ -10,49 +10,92 @@ import {
   Zap,
   Globe
 } from "lucide-react";
+import { motion, useInView } from "framer-motion";
+import { useRef, useEffect, useState } from "react";
+
+interface SkillCategory {
+  title: string;
+  icon: React.ReactNode;
+  skills: Array<{ name: string; level: number }>;
+  color: "primary" | "accent";
+}
 
 const Skills = () => {
-  const skillCategories = [
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const [animated, setAnimated] = useState(false);
+
+  useEffect(() => {
+    if (isInView && !animated) {
+      setAnimated(true);
+    }
+  }, [isInView, animated]);
+
+  const skillCategories: SkillCategory[] = [
     {
       title: "Languages",
       icon: <Code className="h-6 w-6" />,
-      skills: ["PHP", "Python", "SQL","c++", "JavaScript"],
+      skills: [
+        { name: "PHP", level: 95 },
+        { name: "Python", level: 90 },
+        { name: "SQL", level: 88 },
+        { name: "C++", level: 75 },
+        { name: "JavaScript", level: 85 },
+      ],
       color: "primary"
     },
     {
       title: "Backend Frameworks",
       icon: <Server className="h-6 w-6" />,
-      skills: ["Laravel", "FastAPI", "Django"],
+      skills: [
+        { name: "Laravel", level: 95 },
+        { name: "FastAPI", level: 85 },
+        { name: "Django", level: 80 },
+      ],
       color: "accent"
     },
     {
       title: "AI & ML Tools",
       icon: <Brain className="h-6 w-6" />,
-      skills: ["LangChain"],
+      skills: [
+        { name: "LangChain", level: 90 },
+      ],
       color: "primary"
     },
     {
       title: "Databases",
       icon: <Database className="h-6 w-6" />,
-      skills: ["MySQL", "PostgreSQL", "Redis"],
+      skills: [
+        { name: "MySQL", level: 92 },
+        { name: "PostgreSQL", level: 88 },
+        { name: "Redis", level: 85 },
+      ],
       color: "accent"
     },
     {
       title: "DevOps & Cloud",
       icon: <Cloud className="h-6 w-6" />,
-      skills: ["Docker", "GitHub Actions"],
+      skills: [
+        { name: "Docker", level: 85 },
+        { name: "GitHub Actions", level: 80 },
+      ],
       color: "primary"
     },
     {
       title: "Specializations",
       icon: <Zap className="h-6 w-6" />,
-      skills: ["RAG Systems", "API Architecture","Web Development", "System Design"],
+      skills: [
+        { name: "RAG Systems", level: 90 },
+        { name: "API Architecture", level: 95 },
+        { name: "Web Development", level: 92 },
+        { name: "System Design", level: 88 },
+      ],
       color: "accent"
     }
   ];
 
   return (
-    <section className="py-20 px-4 max-w-6xl mx-auto">
+    <section ref={ref} className="py-20 px-4 max-w-6xl mx-auto">
       <div className="text-center mb-16 animate-fade-in">
         <h2 className="text-4xl md:text-5xl font-bold mb-6">
           Skills & <span className="text-gradient">Tech Stack</span>
@@ -64,39 +107,64 @@ const Skills = () => {
       
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
         {skillCategories.map((category, index) => (
-          <Card 
-            key={category.title} 
-            className={`glass-card hover:glow-soft smooth-transition group animate-scale-in stagger-${Math.min(index + 1, 5)} hover:scale-105 transform transition-all duration-500`}
+          <motion.div
+            key={category.title}
+            initial={{ opacity: 0, y: 30 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ delay: index * 0.1, duration: 0.5 }}
           >
-            <div className="p-6">
-              <div className="flex items-center gap-3 mb-4">
-                <div className={`p-2 rounded-lg ${
-                  category.color === 'primary' 
-                    ? 'bg-primary/10 text-primary' 
-                    : 'bg-accent/10 text-accent'
-                }`}>
-                  {category.icon}
-                </div>
-                <h3 className="text-xl font-semibold">{category.title}</h3>
-              </div>
-              
-              <div className="flex flex-wrap gap-2">
-                {category.skills.map((skill) => (
-                  <Badge 
-                    key={skill}
-                    variant="outline" 
-                    className={`glass transition-all duration-200 hover:scale-105 ${
-                      category.color === 'primary'
-                        ? 'border-primary/30 text-primary hover:bg-primary/10'
-                        : 'border-accent/30 text-accent hover:bg-accent/10'
+            <Card 
+              className={`glass-card hover:glow-soft smooth-transition group hover:scale-105 transform transition-all duration-500`}
+            >
+              <div className="p-6">
+                <div className="flex items-center gap-3 mb-6">
+                  <motion.div
+                    className={`p-2 rounded-lg ${
+                      category.color === 'primary' 
+                        ? 'bg-primary/10 text-primary' 
+                        : 'bg-accent/10 text-accent'
                     }`}
+                    whileHover={{ rotate: 360, scale: 1.1 }}
+                    transition={{ duration: 0.5 }}
                   >
-                    {skill}
-                  </Badge>
-                ))}
+                    {category.icon}
+                  </motion.div>
+                  <h3 className="text-xl font-semibold">{category.title}</h3>
+                </div>
+                
+                <div className="space-y-4">
+                  {category.skills.map((skill) => (
+                    <div key={skill.name} className="space-y-2">
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm font-medium text-foreground">
+                          {skill.name}
+                        </span>
+                        <span className="text-xs text-muted-foreground">
+                          {animated ? `${skill.level}%` : "0%"}
+                        </span>
+                      </div>
+                      <div className="relative h-2 bg-secondary rounded-full overflow-hidden">
+                        <motion.div
+                          className={`h-full rounded-full ${
+                            category.color === 'primary'
+                              ? 'bg-primary'
+                              : 'bg-accent'
+                          }`}
+                          initial={{ width: 0 }}
+                          animate={animated ? { width: `${skill.level}%` } : {}}
+                          transition={{
+                            duration: 1.5,
+                            delay: index * 0.1 + 0.3,
+                            ease: "easeOut",
+                          }}
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
-          </Card>
+            </Card>
+          </motion.div>
         ))}
       </div>
       

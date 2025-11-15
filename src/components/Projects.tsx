@@ -2,6 +2,8 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ExternalLink, Github, Zap, Database, Brain } from "lucide-react";
+import { motion } from "framer-motion";
+import TiltCard from "./TiltCard";
 import aiProject from "@/assets/ai-project.jpg";
 import backendProject from "@/assets/backend-project.jpg";
 import reelrzImage from "@/assets/reelrz.png";
@@ -89,12 +91,17 @@ const Projects = () => {
       {/* Projects grid */}
       <div className="grid md:grid-cols-2 gap-8">
         {projects.map((project, index) => (
-          <Card
+          <motion.div
             key={project.title}
-            className={`glass-card hover:glow-soft smooth-transition group overflow-hidden animate-scale-in stagger-${
-              index + 1
-            } hover:scale-105 transform transition-all duration-500`}
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ delay: index * 0.2, duration: 0.6 }}
           >
+            <TiltCard className="h-full">
+              <Card
+                className={`glass-card hover:glow-soft smooth-transition group overflow-hidden h-full hover:scale-[1.02] transform transition-all duration-500`}
+              >
             {/* Project image */}
             <div className="relative overflow-hidden">
               <img
@@ -170,6 +177,8 @@ const Projects = () => {
               </div>
             </div>
           </Card>
+            </TiltCard>
+          </motion.div>
         ))}
       </div>
 

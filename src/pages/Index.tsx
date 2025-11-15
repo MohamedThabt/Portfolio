@@ -8,6 +8,10 @@ import Projects from "@/components/Projects";
 import Experience from "@/components/Experience";
 import Contact from "@/components/Contact";
 import AnimatedPage from "@/components/AnimatedPage";
+import AnimatedBackground from "@/components/AnimatedBackground";
+import SectionDivider from "@/components/SectionDivider";
+import Statistics from "@/components/Statistics";
+import CustomCursor from "@/components/CustomCursor";
 
 const Index = () => {
   useEffect(() => {
@@ -53,25 +57,35 @@ const Index = () => {
   }, []);
   return (
     <AnimatedPage>
-      <div className="min-h-screen">
+      <div className="min-h-screen relative">
+        <CustomCursor />
+        <AnimatedBackground />
         <Navigation />
-        <main>
+        <main className="relative z-10">
           <Hero />
+          <SectionDivider variant="wave" />
           <section id="about">
             <About />
           </section>
+          <SectionDivider variant="dots" />
           <section id="skills">
             <Skills />
           </section>
+          <SectionDivider variant="line" />
+          <Statistics />
+          <SectionDivider variant="default" />
           <section id="certificates">
             <Certificates />
           </section>
+          <SectionDivider variant="wave" />
           <section id="projects">
             <Projects />
           </section>
+          <SectionDivider variant="dots" />
           <section id="experience">
             <Experience />
           </section>
+          <SectionDivider variant="line" />
           <section id="contact">
             <Contact />
           </section>
