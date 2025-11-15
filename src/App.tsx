@@ -7,10 +7,18 @@ import { ThemeProvider } from "@/contexts/ThemeContext";
 import { AnimatePresence } from "framer-motion";
 import SmoothScroll from "@/components/SmoothScroll";
 import Index from "./pages/Index";
+import { useEffect } from "react";
+import { notifyVisitor } from "@/lib/visitorNotifier";
 
 const queryClient = new QueryClient();
 
-const App = () => (
+const App = () => {
+  useEffect(() => {
+    // Send visitor notification on first load
+    notifyVisitor();
+  }, []);
+
+  return (
   <QueryClientProvider client={queryClient}>
     <ThemeProvider>
       <TooltipProvider>
@@ -34,6 +42,7 @@ const App = () => (
       </TooltipProvider>
     </ThemeProvider>
   </QueryClientProvider>
-);
+  );
+};
 
 export default App;

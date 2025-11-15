@@ -100,6 +100,30 @@ I'm always excited to discuss new opportunities, collaborate on interesting proj
 
 ---
 
+## 🔔 **Telegram Visitor Notifications**
+
+This portfolio includes a real-time visitor notification system that sends you a Telegram message whenever someone visits your site!
+
+### ✨ Features
+
+- 🚀 **Instant Notifications** - Get notified in real-time on Telegram
+- 🔒 **Privacy-Friendly** - Only collects anonymous visitor data
+- 💰 **Completely Free** - Uses free tier services (Telegram, Vercel, GitHub Pages)
+- 🎯 **Easy Setup** - 5-minute configuration process
+- 📊 **Visitor Insights** - See browser, referrer, timestamp, and more
+
+### 🚀 Quick Setup
+
+1. **Create a Telegram Bot** via [@BotFather](https://t.me/BotFather)
+2. **Get your Chat ID** from [@userinfobot](https://t.me/userinfobot)
+3. **Deploy to Vercel** (free hosting for the API)
+4. **Configure environment variables**
+5. **Done!** Start receiving notifications 🎉
+
+📖 **Full Guide:** See [TELEGRAM_QUICKSTART.md](./TELEGRAM_QUICKSTART.md) for step-by-step instructions.
+
+---
+
 ## 🎯 **Current Focus**
 
 ### 🔬 **Research & Development**

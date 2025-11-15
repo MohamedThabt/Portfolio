@@ -1,0 +1,5 @@
+{
+  "scripts": {
+    "test:telegram": "node -e \"console.log('Open test-telegram.html in your browser to test notifications')\""
+  }
+}
