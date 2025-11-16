@@ -1,5 +1,6 @@
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { ReactNode, useRef } from "react";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 interface TiltCardProps {
   children: ReactNode;
@@ -7,6 +8,7 @@ interface TiltCardProps {
 }
 
 const TiltCard = ({ children, className = "" }: TiltCardProps) => {
+  const isMobile = useIsMobile();
   const ref = useRef<HTMLDivElement>(null);
 
   const x = useMotionValue(0);
@@ -19,7 +21,7 @@ const TiltCard = ({ children, className = "" }: TiltCardProps) => {
   const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-7.5deg", "7.5deg"]);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!ref.current) return;
+    if (isMobile || !ref.current) return;
 
     const rect = ref.current.getBoundingClientRect();
     const width = rect.width;
@@ -33,9 +35,19 @@ const TiltCard = ({ children, className = "" }: TiltCardProps) => {
   };
 
   const handleMouseLeave = () => {
+    if (isMobile) return;
     x.set(0);
     y.set(0);
   };
+
+  // Skip tilt effect on mobile
+  if (isMobile) {
+    return (
+      <div ref={ref} className={className}>
+        {children}
+      </div>
+    );
+  }
 
   return (
     <motion.div

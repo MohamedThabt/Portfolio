@@ -55,7 +55,7 @@ const Index = () => {
     const observer = new window.IntersectionObserver(handleIntersect, {
       root: null,
       rootMargin: "0px",
-      threshold: 0.5,
+      threshold: 0.3, // Reduced from 0.5 for better performance
     });
     sections.forEach((section) => {
       if (section) observer.observe(section);

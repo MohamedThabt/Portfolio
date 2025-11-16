@@ -54,6 +54,9 @@ export default defineConfig(({ mode }) => ({
     
     // Optimize assets
     assetsInlineLimit: 4096, // Inline assets smaller than 4kb
+    
+    // Enable CSS code splitting
+    cssCodeSplit: true,
   },
   
   // Optimize dependencies
@@ -65,5 +68,14 @@ export default defineConfig(({ mode }) => ({
       "framer-motion",
       "@tanstack/react-query",
     ],
+    // Exclude heavy deps that should be lazy loaded
+    exclude: ["lenis"],
+  },
+  
+  // Performance hints
+  esbuild: {
+    logOverride: { "this-is-undefined-in-esm": "silent" },
+    // Drop console in production
+    drop: mode === "production" ? ["console", "debugger"] : [],
   },
 }));

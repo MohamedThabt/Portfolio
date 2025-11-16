@@ -1,10 +1,13 @@
 import { motion } from "framer-motion";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 interface SectionDividerProps {
   variant?: "default" | "wave" | "dots" | "line";
 }
 
 const SectionDivider = ({ variant = "default" }: SectionDividerProps) => {
+  const isMobile = useIsMobile();
+  
   if (variant === "wave") {
     return (
       <div className="relative w-full h-24 overflow-hidden">
@@ -17,14 +20,14 @@ const SectionDivider = ({ variant = "default" }: SectionDividerProps) => {
             d="M0,60 Q300,20 600,60 T1200,60 L1200,120 L0,120 Z"
             fill="currentColor"
             className="text-border/30"
-            animate={{
+            animate={isMobile ? {} : {
               d: [
                 "M0,60 Q300,20 600,60 T1200,60 L1200,120 L0,120 Z",
                 "M0,60 Q300,100 600,60 T1200,60 L1200,120 L0,120 Z",
                 "M0,60 Q300,20 600,60 T1200,60 L1200,120 L0,120 Z",
               ],
             }}
-            transition={{
+            transition={isMobile ? { duration: 0 } : {
               duration: 8,
               repeat: Infinity,
               ease: "easeInOut",
@@ -43,11 +46,11 @@ const SectionDivider = ({ variant = "default" }: SectionDividerProps) => {
             <motion.div
               key={i}
               className="w-2 h-2 rounded-full bg-primary/30"
-              animate={{
+              animate={isMobile ? {} : {
                 scale: [1, 1.5, 1],
                 opacity: [0.3, 1, 0.3],
               }}
-              transition={{
+              transition={isMobile ? { duration: 0 } : {
                 duration: 2,
                 repeat: Infinity,
                 delay: i * 0.2,

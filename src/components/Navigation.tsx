@@ -2,13 +2,16 @@ import { Home, FileText, Github, Linkedin } from "lucide-react";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import ThemeToggle from "./ThemeToggle";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 const Navigation = () => {
+  const isMobile = useIsMobile();
   const [currentPath, setCurrentPath] = useState("");
   const [activeSection, setActiveSection] = useState("");
 
   useEffect(() => {
     let scrollThrottleTimeout: NodeJS.Timeout | null = null;
+    let ticking = false;
 
     const updateCurrentPath = () => {
       setCurrentPath(window.location.pathname + window.location.hash);
@@ -49,15 +52,15 @@ const Navigation = () => {
     };
 
     const handleScroll = () => {
-      // Throttle scroll updates for performance
-      if (scrollThrottleTimeout) {
-        clearTimeout(scrollThrottleTimeout);
+      // Use requestAnimationFrame for smooth 60fps updates
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          updateCurrentPath();
+          updateActiveSection();
+          ticking = false;
+        });
+        ticking = true;
       }
-
-      scrollThrottleTimeout = setTimeout(() => {
-        updateCurrentPath();
-        updateActiveSection();
-      }, 100); // Reduced throttle time for more responsive updates
     };
 
     window.addEventListener("hashchange", handleHashChange);
@@ -122,9 +125,9 @@ const Navigation = () => {
   return (
     <motion.nav
       className="fixed bottom-4 md:bottom-6 left-1/2 z-50 isolation-auto"
-      initial={{ y: 100, opacity: 0, scale: 0.8, x: "-50%" }}
+      initial={isMobile ? { x: "-50%" } : { y: 100, opacity: 0, scale: 0.8, x: "-50%" }}
       animate={{ y: 0, opacity: 1, scale: 1, x: "-50%" }}
-      transition={{
+      transition={isMobile ? { duration: 0 } : {
         type: "spring",
         stiffness: 400,
         damping: 35,
@@ -133,8 +136,8 @@ const Navigation = () => {
       }}
     >
       <motion.div
-        className="flex items-center gap-1 md:gap-2 bg-background/95 backdrop-blur-xl border border-border/30 rounded-full px-2 py-2 shadow-2xl shadow-black/20 hw-accelerated"
-        whileHover={{
+        className={`flex items-center gap-1 md:gap-2 bg-background/95 ${isMobile ? 'backdrop-blur-sm' : 'backdrop-blur-xl'} border border-border/30 rounded-full px-2 py-2 shadow-2xl shadow-black/20 hw-accelerated`}
+        whileHover={isMobile ? {} : {
           scale: 1.03,
           y: -3,
         }}
@@ -149,9 +152,9 @@ const Navigation = () => {
           <motion.div
             key={item.href}
             className="isolate"
-            initial={{ scale: 0, opacity: 0 }}
+            initial={isMobile ? {} : { scale: 0, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            transition={{
+            transition={isMobile ? { duration: 0 } : {
               delay: index * 0.05,
               type: "spring",
               stiffness: 500,
@@ -192,14 +195,14 @@ const Navigation = () => {
                 }
               `}
               title={item.label}
-              whileHover={{
+              whileHover={isMobile ? {} : {
                 scale: 1.15,
                 y: -3,
               }}
-              whileTap={{
+              whileTap={isMobile ? {} : {
                 scale: 0.9,
               }}
-              transition={{
+              transition={isMobile ? { duration: 0 } : {
                 type: "spring",
                 stiffness: 700,
                 damping: 20,
@@ -209,12 +212,12 @@ const Navigation = () => {
               <AnimatePresence>
                 {isActive(item.href) && (
                   <motion.div
-                    layoutId="activeBackground"
+                    layoutId={isMobile ? undefined : "activeBackground"}
                     className="absolute inset-0 bg-accent rounded-full z-0 hw-accelerated"
-                    initial={{ scale: 0 }}
+                    initial={isMobile ? {} : { scale: 0 }}
                     animate={{ scale: 1 }}
-                    exit={{ scale: 0 }}
-                    transition={{
+                    exit={isMobile ? {} : { scale: 0 }}
+                    transition={isMobile ? { duration: 0 } : {
                       type: "spring",
                       stiffness: 600,
                       damping: 35,
@@ -235,9 +238,9 @@ const Navigation = () => {
         {/* Theme Toggle */}
         <motion.div
           className="ml-1"
-          initial={{ scale: 0, opacity: 0 }}
+          initial={isMobile ? {} : { scale: 0, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          transition={{
+          transition={isMobile ? { duration: 0 } : {
             delay: navItems.length * 0.05,
             type: "spring",
             stiffness: 500,
@@ -246,14 +249,14 @@ const Navigation = () => {
         >
           <motion.div
             className="group relative flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-full isolate hw-accelerated"
-            whileHover={{
+            whileHover={isMobile ? {} : {
               scale: 1.15,
               y: -3,
             }}
-            whileTap={{
+            whileTap={isMobile ? {} : {
               scale: 0.9,
             }}
-            transition={{
+            transition={isMobile ? { duration: 0 } : {
               type: "spring",
               stiffness: 700,
               damping: 20,

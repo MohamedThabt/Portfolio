@@ -213,6 +213,19 @@ body {
   code, pre {
     font-family: "JetBrains Mono", "Consolas", monospace;
   }
+  
+  /* Performance optimizations for sections */
+  section {
+    contain: layout style paint;
+  }
+  
+  /* Optimize off-screen content rendering on mobile */
+  @media (max-width: 768px) {
+    section:not(:first-of-type) {
+      content-visibility: auto;
+      contain-intrinsic-size: 0 500px;
+    }
+  }
 }
 
 @layer components {
@@ -223,6 +236,14 @@ body {
     -webkit-backdrop-filter: blur(20px);
     border: 1px solid var(--glass-border);
     box-shadow: var(--shadow-glass);
+  }
+  
+  /* Reduce blur on mobile for better performance */
+  @media (max-width: 768px) {
+    .glass {
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
   }
 
   .glass-card {
@@ -241,6 +262,14 @@ body {
     -webkit-backdrop-filter: blur(24px) saturate(180%);
     border: 1px solid var(--glass-border);
     box-shadow: var(--shadow-glass);
+  }
+  
+  /* Reduce blur on mobile for better performance */
+  @media (max-width: 768px) {
+    .nav-glass {
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
   }
 
   /* Gradient backgrounds */
