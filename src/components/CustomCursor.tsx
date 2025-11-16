@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 const CustomCursor = () => {
+  const isMobile = useIsMobile();
   const [isHovering, setIsHovering] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [isClicking, setIsClicking] = useState(false);
@@ -15,6 +17,8 @@ const CustomCursor = () => {
   const cursorYSpring = useSpring(cursorY, springConfig);
 
   useEffect(() => {
+    // Don't initialize cursor on mobile
+    if (isMobile) return;
     const moveCursor = (e: MouseEvent) => {
       cursorX.set(e.clientX);
       cursorY.set(e.clientY);
@@ -67,9 +71,10 @@ const CustomCursor = () => {
         el.removeEventListener("mouseleave", handleMouseLeave);
       });
     };
-  }, [cursorX, cursorY]);
+  }, [cursorX, cursorY, isMobile]);
 
-  if (!isVisible) return null;
+  // Don't render cursor on mobile devices
+  if (isMobile || !isVisible) return null;
 
   // Different cursor shapes based on section
   const renderCursor = () => {

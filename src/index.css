@@ -2,16 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Hide default cursor globally */
-* {
-  cursor: none !important;
+/* Hide default cursor globally - only on desktop */
+@media (hover: hover) and (pointer: fine) {
+  * {
+    cursor: none !important;
+  }
 }
 
-/* Performance optimizations for smooth animations */
-* {
-  will-change: auto;
-}
-
+/* Performance optimizations - remove excessive will-change */
 body {
   overscroll-behavior: none;
   -webkit-font-smoothing: antialiased;
@@ -26,18 +24,16 @@ body {
   }
 }
 
-/* Smooth transforms and transitions */
+/* Smooth transforms and transitions - only apply to elements that need it */
 .smooth-transform {
   transform-origin: center;
   transform-style: preserve-3d;
-  will-change: transform;
 }
 
-/* Hardware acceleration for smooth animations */
+/* Hardware acceleration for specific animated elements only */
 .hw-accelerated {
   transform: translateZ(0);
   backface-visibility: hidden;
-  perspective: 1000px;
 }
 
 /* Futuristic Black & White Portfolio Design System */
@@ -502,15 +498,24 @@ body {
 .navbar-item {
   transform: translateZ(0);
   backface-visibility: hidden;
-  perspective: 1000px;
 }
 
-/* Hardware acceleration for smooth animations */
+/* Hardware acceleration for specific hover effects only */
 .nav-hover {
-  will-change: transform;
   transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .nav-hover:hover {
   transform: translateZ(0) scale(1.1) translateY(-2px);
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

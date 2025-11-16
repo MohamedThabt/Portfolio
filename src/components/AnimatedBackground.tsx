@@ -1,10 +1,16 @@
 import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 const AnimatedBackground = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const isMobile = useIsMobile();
+  const animationFrameRef = useRef<number>();
 
   useEffect(() => {
+    // Skip canvas animations on mobile
+    if (isMobile) return;
+    
     const canvas = canvasRef.current;
     if (!canvas) return;
 
@@ -27,7 +33,8 @@ const AnimatedBackground = () => {
       radius: number;
     }> = [];
 
-    const particleCount = 50;
+    // Reduce particle count for better performance
+    const particleCount = 25; // Reduced from 50
     for (let i = 0; i < particleCount; i++) {
       particles.push({
         x: Math.random() * canvas.width,
@@ -53,39 +60,46 @@ const AnimatedBackground = () => {
         ctx.fillStyle = `hsla(var(--foreground), 0.1)`;
         ctx.fill();
 
+        // Reduce connection checks for better performance
         particles.slice(i + 1).forEach((otherParticle) => {
           const dx = particle.x - otherParticle.x;
           const dy = particle.y - otherParticle.y;
           const distance = Math.sqrt(dx * dx + dy * dy);
 
-          if (distance < 150) {
+          // Reduced connection distance from 150 to 100
+          if (distance < 100) {
             ctx.beginPath();
             ctx.moveTo(particle.x, particle.y);
             ctx.lineTo(otherParticle.x, otherParticle.y);
-            ctx.strokeStyle = `hsla(var(--foreground), ${0.1 * (1 - distance / 150)})`;
+            ctx.strokeStyle = `hsla(var(--foreground), ${0.1 * (1 - distance / 100)})`;
             ctx.lineWidth = 0.5;
             ctx.stroke();
           }
         });
       });
 
-      requestAnimationFrame(animate);
+      animationFrameRef.current = requestAnimationFrame(animate);
     };
 
     animate();
 
     return () => {
       window.removeEventListener("resize", setCanvasSize);
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+      }
     };
-  }, []);
+  }, [isMobile]);
 
   return (
     <>
-      <canvas
-        ref={canvasRef}
-        className="fixed inset-0 pointer-events-none z-0"
-        style={{ opacity: 0.3 }}
-      />
+      {!isMobile && (
+        <canvas
+          ref={canvasRef}
+          className="fixed inset-0 pointer-events-none z-0"
+          style={{ opacity: 0.3 }}
+        />
+      )}
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
         <motion.div
           className="absolute inset-0 opacity-20"
@@ -98,7 +112,7 @@ const AnimatedBackground = () => {
             ],
           }}
           transition={{
-            duration: 20,
+            duration: isMobile ? 30 : 20, // Slower on mobile
             repeat: Infinity,
             ease: "linear",
           }}

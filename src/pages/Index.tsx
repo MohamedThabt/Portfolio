@@ -1,17 +1,26 @@
-import { useEffect } from "react";
+import { useEffect, lazy, Suspense } from "react";
 import Navigation from "@/components/Navigation";
 import Hero from "@/components/Hero";
-import About from "@/components/About";
-import Skills from "@/components/Skills";
-import Certificates from "@/components/Certificates";
-import Projects from "@/components/Projects";
-import Experience from "@/components/Experience";
-import Contact from "@/components/Contact";
 import AnimatedPage from "@/components/AnimatedPage";
 import AnimatedBackground from "@/components/AnimatedBackground";
 import SectionDivider from "@/components/SectionDivider";
-import Statistics from "@/components/Statistics";
 import CustomCursor from "@/components/CustomCursor";
+
+// Lazy load components below the fold for better initial load performance
+const About = lazy(() => import("@/components/About"));
+const Skills = lazy(() => import("@/components/Skills"));
+const Statistics = lazy(() => import("@/components/Statistics"));
+const Certificates = lazy(() => import("@/components/Certificates"));
+const Projects = lazy(() => import("@/components/Projects"));
+const Experience = lazy(() => import("@/components/Experience"));
+const Contact = lazy(() => import("@/components/Contact"));
+
+// Loading fallback component
+const SectionLoader = () => (
+  <div className="min-h-[400px] flex items-center justify-center">
+    <div className="animate-pulse text-muted-foreground">Loading...</div>
+  </div>
+);
 
 const Index = () => {
   useEffect(() => {
@@ -64,31 +73,45 @@ const Index = () => {
         <main className="relative z-10">
           <Hero />
           <SectionDivider variant="wave" />
-          <section id="about">
-            <About />
-          </section>
+          <Suspense fallback={<SectionLoader />}>
+            <section id="about">
+              <About />
+            </section>
+          </Suspense>
           <SectionDivider variant="dots" />
-          <section id="skills">
-            <Skills />
-          </section>
+          <Suspense fallback={<SectionLoader />}>
+            <section id="skills">
+              <Skills />
+            </section>
+          </Suspense>
           <SectionDivider variant="line" />
-          <Statistics />
+          <Suspense fallback={<SectionLoader />}>
+            <Statistics />
+          </Suspense>
           <SectionDivider variant="default" />
-          <section id="certificates">
-            <Certificates />
-          </section>
+          <Suspense fallback={<SectionLoader />}>
+            <section id="certificates">
+              <Certificates />
+            </section>
+          </Suspense>
           <SectionDivider variant="wave" />
-          <section id="projects">
-            <Projects />
-          </section>
+          <Suspense fallback={<SectionLoader />}>
+            <section id="projects">
+              <Projects />
+            </section>
+          </Suspense>
           <SectionDivider variant="dots" />
-          <section id="experience">
-            <Experience />
-          </section>
+          <Suspense fallback={<SectionLoader />}>
+            <section id="experience">
+              <Experience />
+            </section>
+          </Suspense>
           <SectionDivider variant="line" />
-          <section id="contact">
-            <Contact />
-          </section>
+          <Suspense fallback={<SectionLoader />}>
+            <section id="contact">
+              <Contact />
+            </section>
+          </Suspense>
         </main>
 
         {/* Footer */}

@@ -14,12 +14,19 @@ const queryClient = new QueryClient();
 
 const App = () => {
   useEffect(() => {
-    // Wait for document to be fully loaded before sending notification
+    // Optimize visitor notification with better timing
     const sendNotification = () => {
-      // Add a small delay to ensure all data is available
-      setTimeout(() => {
-        notifyVisitor();
-      }, 1000);
+      // Use requestIdleCallback if available for better performance
+      if ('requestIdleCallback' in window) {
+        (window as any).requestIdleCallback(() => {
+          notifyVisitor();
+        });
+      } else {
+        // Fallback for browsers without requestIdleCallback
+        setTimeout(() => {
+          notifyVisitor();
+        }, 2000);
+      }
     };
 
     if (document.readyState === 'complete') {

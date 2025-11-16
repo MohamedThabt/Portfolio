@@ -12,12 +12,19 @@ const SmoothScroll = ({ children }: SmoothScrollProps) => {
       "(prefers-reduced-motion: reduce)"
     ).matches;
 
+    // Detect mobile
+    const isMobile = 'ontouchstart' in window || 
+                     navigator.maxTouchPoints > 0 || 
+                     window.innerWidth < 768;
+
+    // Disable smooth scroll on mobile for better performance
+    if (isMobile || prefersReducedMotion) {
+      return; // Skip Lenis initialization
+    }
+
     const lenis = new Lenis({
-      duration: prefersReducedMotion ? 0.6 : 1.4,
-      easing: (t) =>
-        prefersReducedMotion
-          ? Math.min(1, 1.001 - Math.pow(2, -8 * t))
-          : Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      duration: 1.2, // Reduced from 1.4
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
     });
 
     function raf(time: number) {
