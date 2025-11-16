@@ -6,7 +6,13 @@ import { useState, useEffect } from 'react';
  * @returns boolean indicating if device is mobile
  */
 export function useIsMobile(): boolean {
-  const [isMobile, setIsMobile] = useState(false);
+  // Initialize with immediate check to prevent flash of wrong content
+  const [isMobile, setIsMobile] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    const isMobileWidth = window.innerWidth < 768;
+    return isTouchDevice || isMobileWidth;
+  });
 
   useEffect(() => {
     const checkMobile = () => {
