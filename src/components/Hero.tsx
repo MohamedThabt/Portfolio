@@ -1,380 +1,169 @@
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import {
-  ArrowDown,
-  Download,
-  Github,
-  Linkedin,
-  Mail,
-  Server,
-  Database,
-  Code,
-  Cpu,
-  Zap,
-  Sparkles,
-  Brain,
-} from "lucide-react";
-import { useState, useEffect } from "react";
-import { motion, useScroll, useTransform, useMotionValue, useSpring } from "framer-motion";
-import { useIsMobile } from "@/hooks/useIsMobile";
+import { ArrowDown, Download, Github, Linkedin, Mail } from "lucide-react";
+import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { useRef, useState } from "react";
 
-const Hero = () => {
-  const [typedText, setTypedText] = useState("");
-  const isMobile = useIsMobile();
-  const fullText = "Building AI-Powered Systems That Scale in Production";
-  const { scrollY } = useScroll();
-  const y = useTransform(scrollY, [0, 500], [0, 150]);
-  const opacity = useTransform(scrollY, [0, 300], [1, 0]);
+const MagneticButton = ({ children, className, ...props }: any) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
 
-  useEffect(() => {
-    let index = 0;
-    const timer = setInterval(() => {
-      if (index <= fullText.length) {
-        setTypedText(fullText.slice(0, index));
-        index++;
-      } else {
-        clearInterval(timer);
-      }
-    }, isMobile ? 50 : 100); // Faster typing on mobile
+  const mouseXSpring = useSpring(x, { stiffness: 150, damping: 15 });
+  const mouseYSpring = useSpring(y, { stiffness: 150, damping: 15 });
 
-    return () => clearInterval(timer);
-  }, [isMobile]);
+  const handleMouseMove = (e: React.MouseEvent) => {
+    const { clientX, clientY } = e;
+    const { left, top, width, height } = ref.current!.getBoundingClientRect();
+    const xPos = clientX - (left + width / 2);
+    const yPos = clientY - (top + height / 2);
+    x.set(xPos * 0.35);
+    y.set(yPos * 0.35);
+  };
 
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-
-  useEffect(() => {
-    // Skip mouse tracking on mobile
-    if (isMobile) return;
-    
-    const handleMouseMove = (e: MouseEvent) => {
-      mouseX.set(e.clientX / window.innerWidth - 0.5);
-      mouseY.set(e.clientY / window.innerHeight - 0.5);
-    };
-
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, [mouseX, mouseY, isMobile]);
-
-  const springConfig = { stiffness: 50, damping: 20 };
-  const mouseXSpring = useSpring(mouseX, springConfig);
-  const mouseYSpring = useSpring(mouseY, springConfig);
+  const handleMouseLeave = () => {
+    x.set(0);
+    y.set(0);
+  };
 
   return (
-    <motion.section
-      className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20"
-      style={{ y, opacity }}
+    <motion.div
+      ref={ref}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      style={{ x: mouseXSpring, y: mouseYSpring }}
+      className="inline-block"
     >
-      {/* Pure black background with radial gradient */}
-      <div className="absolute inset-0 gradient-radial" />
-      
-      {/* Animated gradient orbs that follow mouse - disabled on mobile */}
-      {!isMobile && (
-        <>
-          <motion.div
-            className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full blur-3xl opacity-20"
-            style={{
-              x: useTransform(mouseXSpring, [-0.5, 0.5], [-100, 100]),
-              y: useTransform(mouseYSpring, [-0.5, 0.5], [-100, 100]),
-              background: "radial-gradient(circle, hsl(var(--primary)) 0%, transparent 70%)",
-            }}
-            animate={{
-              scale: [1, 1.2, 1],
-              opacity: [0.2, 0.3, 0.2],
-            }}
-            transition={{
-              duration: 8,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-          />
-          <motion.div
-            className="absolute bottom-1/4 right-1/4 w-96 h-96 rounded-full blur-3xl opacity-20"
-            style={{
-              x: useTransform(mouseXSpring, [-0.5, 0.5], [100, -100]),
-              y: useTransform(mouseYSpring, [-0.5, 0.5], [100, -100]),
-              background: "radial-gradient(circle, hsl(var(--accent)) 0%, transparent 70%)",
-            }}
-            animate={{
-              scale: [1.2, 1, 1.2],
-              opacity: [0.2, 0.3, 0.2],
-            }}
-            transition={{
-              duration: 10,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-          />
-        </>
-      )}
+      <Button className={className} {...props}>
+        {children}
+      </Button>
+    </motion.div>
+  );
+};
 
-      {/* Floating API nodes and backend particles - reduced on mobile */}
-      <div className="absolute inset-0 overflow-hidden">
-        {/* API Nodes - fewer on mobile */}
-        {(!isMobile || Math.random() > 0.5) && (
-          <div
-            className="api-node top-1/4 left-1/4"
-            style={{ animationDelay: "0s" }}
-          />
-        )}
-        {!isMobile && (
-          <>
-            <div
-              className="api-node top-1/3 right-1/3"
-              style={{ animationDelay: "1s" }}
-            />
-            <div
-              className="api-node bottom-1/4 left-1/3"
-              style={{ animationDelay: "2s" }}
-            />
-          </>
-        )}
-        <div
-          className="api-node top-1/2 right-1/4"
-          style={{ animationDelay: "3s" }}
-        />
-        {!isMobile && (
-          <div
-            className="api-node top-3/4 left-1/2"
-            style={{ animationDelay: "4s" }}
-          />
-        )}
+const Hero = () => {
+  const text = "Building systems that scale & think.";
+  const words = text.split(" ");
 
-        {/* Floating backend icons with enhanced animations - reduced on mobile */}
-        {!isMobile && (
-          <>
-            <motion.div
-              className="absolute top-20 left-20 opacity-30"
-              animate={{
-                y: [0, -20, 0],
-                rotate: [0, 5, -5, 0],
-              }}
-              transition={{
-                duration: 6,
-                repeat: Infinity,
-                ease: "easeInOut",
-                delay: 0.5,
-              }}
-            >
-              <Server className="h-8 w-8 text-foreground" />
-            </motion.div>
-            <motion.div
-              className="absolute top-32 right-32 opacity-30"
-              animate={{
-                y: [0, -15, 0],
-                rotate: [0, -5, 5, 0],
-              }}
-              transition={{
-                duration: 5,
-                repeat: Infinity,
-                ease: "easeInOut",
-                delay: 1.5,
-              }}
-            >
-              <Database className="h-6 w-6 text-foreground" />
-            </motion.div>
-            <motion.div
-              className="absolute bottom-40 left-40 opacity-30"
-              animate={{
-                y: [0, -25, 0],
-                rotate: [0, 10, -10, 0],
-              }}
-              transition={{
-                duration: 7,
-                repeat: Infinity,
-                ease: "easeInOut",
-                delay: 2.5,
-              }}
-            >
-              <Code className="h-10 w-10 text-foreground" />
-            </motion.div>
-            <motion.div
-              className="absolute bottom-20 right-20 opacity-30"
-              animate={{
-                y: [0, -18, 0],
-                rotate: [0, -8, 8, 0],
-              }}
-              transition={{
-                duration: 6.5,
-                repeat: Infinity,
-                ease: "easeInOut",
-                delay: 3.5,
-              }}
-            >
-              <Cpu className="h-7 w-7 text-foreground" />
-            </motion.div>
-            <motion.div
-              className="absolute top-1/2 left-10 opacity-30"
-              animate={{
-                y: [0, -12, 0],
-                scale: [1, 1.2, 1],
-              }}
-              transition={{
-                duration: 4,
-                repeat: Infinity,
-                ease: "easeInOut",
-                delay: 4.5,
-              }}
-            >
-              <Zap className="h-5 w-5 text-foreground" />
-            </motion.div>
-            <motion.div
-              className="absolute top-1/3 right-1/4 opacity-20"
-              animate={{
-                rotate: 360,
-                scale: [1, 1.3, 1],
-              }}
-              transition={{
-                rotate: { duration: 20, repeat: Infinity, ease: "linear" },
-                scale: { duration: 3, repeat: Infinity, ease: "easeInOut" },
-              }}
-            >
-              <Sparkles className="h-6 w-6 text-primary" />
-            </motion.div>
-          </>
-        )}
-      </div>
+  const container = {
+    hidden: { opacity: 0 },
+    visible: (i = 1) => ({
+      opacity: 1,
+      transition: { staggerChildren: 0.12, delayChildren: 0.04 * i },
+    }),
+  };
 
-      {/* Content */}
-      <div className="relative z-10 text-center px-4 max-w-5xl mx-auto">
-        <div className="mb-8 animate-fade-in">
-          {/* Terminal-style typing headline */}
-          <div className="terminal-bg p-6 rounded-xl mb-8 max-w-3xl mx-auto">
-            <div className="flex items-center gap-2 mb-4">
-              <div className="w-3 h-3 rounded-full bg-red-500"></div>
-              <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-              <div className="w-3 h-3 rounded-full bg-green-500"></div>
-            </div>
-            <div className="text-left">
-              <span className="text-green-400 text-sm">$ </span>
-              <span className="text-foreground text-lg font-mono">
-                {typedText}
-                <span className="typing-cursor text-foreground">|</span>
-              </span>
-            </div>
-          </div>
+  const child = {
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        type: "spring",
+        damping: 12,
+        stiffness: 100,
+      },
+    },
+    hidden: {
+      opacity: 0,
+      y: 20,
+      transition: {
+        type: "spring",
+        damping: 12,
+        stiffness: 100,
+      },
+    },
+  };
 
-          <h1 className="text-3xl md:text-5xl lg:text-6xl font-display font-bold mb-6 leading-tight tracking-tight">
-            Hi, I'm{" "}
-            <span className="text-gradient">Mohamed Thabet</span>
-          </h1>
-          
-          <h2 className="text-xl md:text-2xl lg:text-3xl font-medium mb-6 leading-relaxed text-muted-foreground">
+  return (
+    <section className="min-h-[100dvh] flex flex-col justify-center px-6 md:px-12 lg:px-24 pt-20 pb-12 bg-background relative overflow-hidden">
+      {/* Subtle Background Accent */}
+      <div className="absolute top-0 right-0 w-[50vw] h-[50vh] bg-accent/30 blur-[120px] rounded-full -translate-y-1/2 translate-x-1/3 pointer-events-none" />
+
+      <div className="max-w-4xl z-10">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+        >
+          <h2 className="text-base md:text-xl font-medium text-muted-foreground mb-4 md:mb-6 tracking-wide uppercase md:normal-case">
             Backend & AI Engineer
           </h2>
+          
+          <motion.h1 
+            className="text-[3.5rem] leading-[0.95] md:text-7xl lg:text-8xl font-display font-bold tracking-tight mb-6 md:mb-8 md:leading-[1.1] flex flex-wrap gap-x-4 gap-y-2"
+            variants={container}
+            initial="hidden"
+            animate="visible"
+          >
+            {words.map((word, index) => (
+              <motion.span key={index} variants={child} className={word.includes("scale") || word.includes("think") ? "text-muted-foreground" : ""}>
+                {word}
+              </motion.span>
+            ))}
+          </motion.h1>
 
-          <p className="text-base md:text-lg text-muted-foreground mb-8 max-w-2xl mx-auto leading-relaxed">
-            Specializing in Laravel backends, RAG architectures, and AI-powered APIs.
-            Turning complex requirements into scalable, maintainable systems.
+          <p className="text-lg md:text-2xl text-muted-foreground max-w-2xl mb-10 md:mb-12 leading-relaxed font-light">
+            I specialize in architecting robust Laravel backends and integrating intelligent AI agents. 
+            Turning complex data into clear, actionable insights.
           </p>
 
-          {/* Professional Badges */}
-          <div className="flex flex-wrap justify-center gap-3 mb-12">
-            <Badge variant="outline" className="glass border-primary/30 text-primary px-4 py-2 text-sm font-medium">
-              <Server className="mr-2 h-4 w-4" />
-              Backend Architect
-            </Badge>
-            <Badge variant="outline" className="glass border-accent/30 text-accent px-4 py-2 text-sm font-medium">
-              <Brain className="mr-2 h-4 w-4" />
-              AI Integration
-            </Badge>
-            <Badge variant="outline" className="glass border-primary/30 text-primary px-4 py-2 text-sm font-medium">
-              <Database className="mr-2 h-4 w-4" />
-              Database Design
-            </Badge>
-            <Badge variant="outline" className="glass border-accent/30 text-accent px-4 py-2 text-sm font-medium">
-              <Zap className="mr-2 h-4 w-4" />
-              Performance Tuning
-            </Badge>
-          </div>
-        </div>
-
-        {/* CTA Buttons */}
-        <div
-          className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8 animate-fade-in"
-          style={{ animationDelay: "0.3s" }}
-        >
-          <Button
-            size="lg"
-            className="gradient-primary hover:glow-primary smooth-transition px-8 py-6 text-base font-semibold rounded-full"
-            asChild
-          >
-            <a href="#projects">View Selected Work</a>
-          </Button>
-          <Button
-            variant="outline"
-            size="lg"
-            className="glass-card hover:glow-soft px-8 py-6 text-base font-semibold rounded-full border-primary/30"
-            asChild
-          >
-            <a
-              href="https://drive.google.com/file/d/1_ab8D-YieGBzIWy-riT4XXrQ7gChgm5s/view?usp=sharing"
-              download="Mohamed_Thabet_CV.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
+          <div className="flex flex-col sm:flex-row gap-4 md:gap-6 mb-16 md:mb-20">
+            <MagneticButton
+              size="lg"
+              className="h-14 px-8 text-lg rounded-full bg-foreground text-background hover:bg-foreground/90 transition-all duration-300 w-full sm:w-auto"
+              asChild
             >
-              <Download className="mr-2 h-5 w-5" />
-              Download CV
-            </a>
-          </Button>
-        </div>
+              <a href="#projects">View Selected Work</a>
+            </MagneticButton>
+            
+            <MagneticButton
+              variant="outline"
+              size="lg"
+              className="h-14 px-8 text-lg rounded-full border-2 hover:bg-accent transition-all duration-300 w-full sm:w-auto"
+              asChild
+            >
+              <a
+                href="https://drive.google.com/file/d/1_ab8D-YieGBzIWy-riT4XXrQ7gChgm5s/view?usp=sharing"
+                download="Mohamed_Thabet_CV.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Download className="mr-2 h-5 w-5" />
+                CV
+              </a>
+            </MagneticButton>
+          </div>
 
-        {/* Availability Status */}
-        <p className="text-sm text-muted-foreground mb-12 animate-fade-in" style={{ animationDelay: "0.4s" }}>
-          Available for remote roles & freelance projects
-        </p>
-
-        {/* Social Links */}
-        <div
-          className="flex justify-center gap-6 mb-16 animate-fade-in"
-          style={{ animationDelay: "0.6s" }}
-        >
-          <Button
-            variant="ghost"
-            size="lg"
-            className="glass-card hover:glow-soft p-4 rounded-full"
-            asChild
-          >
+          <div className="flex items-center gap-8 justify-center sm:justify-start">
             <a
               href="https://github.com/MohamedThabt"
               target="_blank"
               rel="noopener noreferrer"
+              className="text-muted-foreground hover:text-foreground transition-colors p-2 -m-2"
             >
               <Github className="h-6 w-6" />
             </a>
-          </Button>
-          <Button
-            variant="ghost"
-            size="lg"
-            className="glass-card hover:glow-soft p-4 rounded-full"
-            asChild
-          >
             <a
               href="https://www.linkedin.com/in/mohamed--thabet"
               target="_blank"
               rel="noopener noreferrer"
+              className="text-muted-foreground hover:text-foreground transition-colors p-2 -m-2"
             >
               <Linkedin className="h-6 w-6" />
             </a>
-          </Button>
-          <Button
-            variant="ghost"
-            size="lg"
-            className="glass-card hover:glow-soft p-4 rounded-full"
-            asChild
-          >
-            <a href="mailto:mohamedthabetthabet36@gmail.com">
+            <a
+              href="mailto:mohamedthabetthabet36@gmail.com"
+              className="text-muted-foreground hover:text-foreground transition-colors p-2 -m-2"
+            >
               <Mail className="h-6 w-6" />
             </a>
-          </Button>
-        </div>
-
-        {/* Scroll indicator */}
-        <div className="animate-bounce">
-          <ArrowDown className="h-8 w-8 mx-auto text-primary opacity-60" />
-        </div>
+          </div>
+        </motion.div>
       </div>
-    </motion.section>
+
+      <div className="absolute bottom-8 left-0 right-0 flex justify-center animate-bounce opacity-50 hidden md:flex">
+        <ArrowDown className="h-6 w-6" />
+      </div>
+    </section>
   );
 };
 

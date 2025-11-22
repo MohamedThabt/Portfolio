@@ -1,234 +1,193 @@
-import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ExternalLink, Github, Zap, Database, Brain, Code } from "lucide-react";
-import { motion } from "framer-motion";
-import TiltCard from "./TiltCard";
-import aiProject from "@/assets/ai-project.jpg";
-import backendProject from "@/assets/backend-project.jpg";
+import { ExternalLink, Code } from "lucide-react";
 import reelrzImage from "@/assets/reelrz.png";
 import elearningImage from "@/assets/elearning.png";
+import { useRef, useState } from "react";
+
+const ProjectCard = ({ project }: { project: any }) => {
+  const divRef = useRef<HTMLDivElement>(null);
+  const [isFocused, setIsFocused] = useState(false);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [opacity, setOpacity] = useState(0);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!divRef.current || window.innerWidth < 768) return;
+
+    const div = divRef.current;
+    const rect = div.getBoundingClientRect();
+
+    setPosition({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+  };
+
+  const handleFocus = () => {
+    setIsFocused(true);
+    setOpacity(1);
+  };
+
+  const handleBlur = () => {
+    setIsFocused(false);
+    setOpacity(0);
+  };
+
+  const handleMouseEnter = () => {
+    setOpacity(1);
+  };
+
+  const handleMouseLeave = () => {
+    setOpacity(0);
+  };
+
+  return (
+    <div
+      ref={divRef}
+      onMouseMove={handleMouseMove}
+      onFocus={handleFocus}
+      onBlur={handleBlur}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      className="relative overflow-hidden rounded-xl border bg-card text-card-foreground shadow-sm transition-all duration-300 hover:shadow-md group"
+    >
+      <div
+        className="pointer-events-none absolute -inset-px opacity-0 transition duration-300"
+        style={{
+          opacity,
+          background: `radial-gradient(600px circle at ${position.x}px ${position.y}px, rgba(255,255,255,.06), transparent 40%)`,
+        }}
+      />
+      
+      <div className="relative z-10 flex flex-col h-full">
+        <div className="aspect-video overflow-hidden border-b border-border/50">
+          <img
+            src={project.image}
+            alt={project.title}
+            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+          />
+        </div>
+
+        <div className="p-6 space-y-4 flex-1 flex flex-col">
+          <div className="flex items-center justify-between">
+            <h3 className="text-2xl font-display font-semibold">{project.title}</h3>
+            <div className="flex gap-2">
+              {project.demo && project.demo !== "#" && (
+                <Button variant="ghost" size="icon" asChild className="rounded-full hover:bg-secondary">
+                  <a href={project.demo} target="_blank" rel="noopener noreferrer">
+                    <ExternalLink className="h-5 w-5" />
+                  </a>
+                </Button>
+              )}
+            </div>
+          </div>
+
+          <p className="text-muted-foreground leading-relaxed line-clamp-3 md:line-clamp-none">
+            {project.description}
+          </p>
+
+          <div className="flex flex-wrap gap-2 pt-2">
+            {project.tech.map((tech: string) => (
+              <Badge key={tech} variant="secondary" className="rounded-md px-2 py-1 font-normal text-sm">
+                {tech}
+              </Badge>
+            ))}
+          </div>
+
+          <div className="pt-4 border-t border-border/50 mt-auto hidden md:block">
+            <h4 className="text-sm font-medium mb-3 flex items-center gap-2">
+              <Code className="h-4 w-4" />
+              Engineering Highlights
+            </h4>
+            <ul className="space-y-2">
+              {project.engineeringHighlights.map((highlight: string, idx: number) => (
+                <li key={idx} className="text-sm text-muted-foreground flex items-start gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 shrink-0" />
+                  {highlight}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const Projects = () => {
   const projects = [
     {
       title: "Reelrz.com",
-      description: `A modern freelancing platform connecting video creators with brands. Built to handle high-traffic content collaboration with real-time features and secure payment processing.`,
+      description: `A modern freelancing platform connecting video creators with brands. Built to handle high-traffic content collaboration with real-time features.`,
       image: reelrzImage,
       category: "Full-Stack Platform",
       role: "Backend Lead",
-      tech: ["Laravel", "Redis", "REST API", "MySQL", "React", "Pusher"],
+      tech: ["Laravel", "Redis", "REST API", "MySQL", "React"],
       features: [
-        "Multi-role authentication system with granular permissions",
-        "Real-time messaging with Pusher (WebSocket integration)",
-        "Project workflow engine with proposal and deal management",
-        "Secure wallet system with commission handling and payouts",
-        "Creator portfolio with video CDN optimization",
-        "Admin analytics dashboard with revenue tracking",
+        "Multi-role authentication",
+        "Real-time messaging",
+        "Project workflow engine",
+        "Secure wallet system",
       ],
       engineeringHighlights: [
-        "Implemented Redis caching to reduce database queries by 60%",
-        "Built background job queue for async email and notifications",
-        "Designed scalable REST API serving React SPA",
-        "Rate-limited API endpoints to prevent abuse",
+        "Reduced DB queries by 60% via Redis",
+        "Async job queue for notifications",
+        "Scalable REST API architecture",
       ],
-      github: "#",
       demo: "https://reelrz.com/",
-      icon: <Database className="h-5 w-5" />,
     },
-
     {
       title: "E-Learning Platform",
       description:
-        "An interactive learning management system (LMS) with course creation, quiz engine, and flexible enrollment. Built as a Single Page Application using Laravel + Inertia.js + React for smooth UX.",
+        "An interactive learning management system (LMS) with course creation, quiz engine, and flexible enrollment. Built as a Single Page Application.",
       image: elearningImage,
       category: "EdTech SPA",
       role: "Solo Developer",
       tech: ["Laravel", "Inertia.js", "React", "MySQL"],
       features: [
-        "Role-based access: Admin, Instructor, Student",
-        "Course builder with rich media support",
-        "Quiz engine with automated grading and review",
-        "Flexible enrollment: Payment, manual, and code-based",
-        "Student progress tracking and completion certificates",
-        "Real-time UI updates with Inertia.js (no API overhead)",
+        "Role-based access control",
+        "Course builder with rich media",
+        "Automated quiz grading",
+        "Real-time UI updates",
       ],
       engineeringHighlights: [
-        "Server-side rendering with client-side transitions via Inertia.js",
-        "Optimized SQL queries and indexed tables for fast course loading",
-        "Implemented soft deletes and audit logging for data integrity",
-        "Built reusable React components for consistent UI patterns",
+        "Server-side rendering with Inertia.js",
+        "Optimized SQL for fast loading",
+        "Audit logging for data integrity",
       ],
-      github: "#",
       demo: "#",
-      icon: <Zap className="h-5 w-5" />,
     },
   ];
 
-  // const categories = ["All", "Web Apps", "RAG/AI","Backend"];
-
   return (
-    <section className="py-20 px-4 max-w-6xl mx-auto">
-      <div className="text-center mb-16 animate-fade-in">
-        <h2 className="text-4xl md:text-5xl font-display font-bold mb-6 tracking-tight">
-          Featured <span className="text-gradient">Projects</span>
-        </h2>
-        <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
-          Case studies showcasing backend architecture, API design, and real-world engineering solutions
-        </p>
+    <section id="projects" className="py-24 md:px-12 lg:px-24 bg-secondary/30 overflow-hidden">
+      <div className="max-w-7xl mx-auto px-6 md:px-0">
+        <div className="mb-12 md:mb-16">
+          <span className="text-xs font-mono text-muted-foreground mb-2 block">02</span>
+          <h2 className="text-3xl md:text-4xl font-display font-bold mb-6 tracking-tight">
+            Selected Work
+          </h2>
+          <p className="text-lg text-muted-foreground max-w-2xl font-light leading-relaxed">
+            Case studies showcasing backend architecture, API design, and real-world engineering solutions.
+          </p>
+        </div>
       </div>
 
-      {/* Category filters */}
-      {/* <div className="flex flex-wrap justify-center gap-4 mb-12">
-        {categories.map((category) => (
-          <Button 
-            key={category}
-            variant={category === "All" ? "default" : "outline"}
-            className={category === "All" 
-              ? "gradient-primary" 
-              : "glass-card border-primary/30 hover:bg-primary/10"
-            }
+      {/* Mobile: Horizontal Snap Scroll | Desktop: Grid */}
+      <div className="
+        flex overflow-x-auto snap-x snap-mandatory gap-6 px-6 pb-8 -mx-6 
+        md:grid md:grid-cols-2 md:gap-12 md:px-0 md:pb-0 md:mx-auto md:max-w-7xl
+        scrollbar-hide
+      ">
+        {projects.map((project) => (
+          <div 
+            key={project.title} 
+            className="
+              snap-center shrink-0 w-[85vw] md:w-auto
+              first:pl-6 md:first:pl-0 last:pr-6 md:last:pr-0
+            "
           >
-            {category}
-          </Button>
-        ))}
-      </div> */}
-
-      {/* Projects grid */}
-      <div className="grid md:grid-cols-2 gap-8">
-        {projects.map((project, index) => (
-          <motion.div
-            key={project.title}
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ delay: index * 0.2, duration: 0.6 }}
-          >
-            <TiltCard className="h-full">
-              <Card
-                className={`glass-card hover:glow-soft smooth-transition group overflow-hidden h-full hover:scale-[1.02] transform transition-all duration-500`}
-              >
-            {/* Project image */}
-            <div className="relative overflow-hidden">
-              <img
-                src={project.image}
-                alt={project.title}
-                className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent" />
-              <div className="absolute top-4 left-4">
-                <Badge
-                  variant="outline"
-                  className="glass border-primary/30 text-primary"
-                >
-                  {project.icon}
-                  <span className="ml-2">{project.category}</span>
-                </Badge>
-              </div>
-            </div>
-
-            {/* Project content */}
-            <div className="p-6">
-              <div className="flex items-center justify-between mb-3">
-                <h3 className="text-xl md:text-2xl font-display font-semibold group-hover:text-gradient transition-colors">
-                  {project.title}
-                </h3>
-                {project.role && (
-                  <Badge variant="outline" className="glass border-accent/30 text-accent text-xs">
-                    {project.role}
-                  </Badge>
-                )}
-              </div>
-              <p className="text-muted-foreground mb-4 leading-relaxed">
-                {project.description}
-              </p>
-
-              {/* Engineering Highlights */}
-              {project.engineeringHighlights && project.engineeringHighlights.length > 0 && (
-                <div className="mb-4 bg-secondary/30 rounded-lg p-4">
-                  <h4 className="text-sm font-semibold mb-2 text-primary flex items-center gap-2">
-                    <Code className="h-4 w-4" />
-                    Engineering Highlights
-                  </h4>
-                  <ul className="text-sm text-muted-foreground space-y-1.5">
-                    {project.engineeringHighlights.map((highlight, idx) => (
-                      <li key={idx} className="flex items-start gap-2">
-                        <div className="w-1.5 h-1.5 bg-primary rounded-full mt-1.5 flex-shrink-0" />
-                        <span>{highlight}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-
-              {/* Key features */}
-              <div className="mb-4">
-                <h4 className="text-sm font-medium mb-2 text-foreground">
-                  Key Features:
-                </h4>
-                <ul className="text-sm text-muted-foreground space-y-1">
-                  {project.features.slice(0, 4).map((feature) => (
-                    <li key={feature} className="flex items-start gap-2">
-                      <div className="w-1 h-1 bg-accent rounded-full mt-2 flex-shrink-0" />
-                      <span>{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* Tech stack */}
-              <div className="mb-6">
-                <div className="flex flex-wrap gap-2">
-                  {project.tech.map((tech) => (
-                    <Badge
-                      key={tech}
-                      variant="outline"
-                      className="glass border-primary/20 text-primary hover:bg-primary/10 transition-colors text-xs"
-                    >
-                      {tech}
-                    </Badge>
-                  ))}
-                </div>
-              </div>
-
-              {/* Action buttons */}
-              <div className="flex gap-3">
-                {project.demo && project.demo !== "#" && (
-                  <Button size="sm" className="gradient-primary flex-1" asChild>
-                    <a
-                      href={project.demo}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <ExternalLink className="mr-2 h-4 w-4" />
-                      View Live
-                    </a>
-                  </Button>
-                )}
-                {!project.demo || project.demo === "#" ? (
-                  <Button size="sm" variant="outline" className="glass border-primary/30 flex-1" disabled>
-                    <ExternalLink className="mr-2 h-4 w-4" />
-                    Private Project
-                  </Button>
-                ) : null}
-              </div>
-            </div>
-          </Card>
-            </TiltCard>
-          </motion.div>
+            <ProjectCard project={project} />
+          </div>
         ))}
       </div>
-
-      {/* View more
-      // <div className="text-center mt-12">
-      //   <Button 
-      //     variant="outline" 
-      //     size="lg"
-      //     className="glass-card hover:glow-soft border-primary/30 px-8"
-      //   >
-      //     View All Projects
-      //   </Button>
-      // </div> */}
     </section>
   );
 };

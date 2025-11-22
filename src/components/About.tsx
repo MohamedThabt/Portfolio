@@ -1,183 +1,131 @@
-import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
 import profilePhoto from "@/assets/profile-photo.jpg";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useRef, useState, useEffect } from "react";
 
-const About = () => {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
+const ScrambleText = ({ text, className }: { text: string, className?: string }) => {
+  const [display, setDisplay] = useState(text);
+  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()";
+  
+  const scramble = () => {
+    let iteration = 0;
+    const interval = setInterval(() => {
+      setDisplay(
+        text
+          .split("")
+          .map((letter, index) => {
+            if (index < iteration) {
+              return text[index];
+            }
+            return chars[Math.floor(Math.random() * chars.length)];
+          })
+          .join("")
+      );
+
+      if (iteration >= text.length) {
+        clearInterval(interval);
+      }
+
+      iteration += 1 / 3;
+    }, 30);
+  };
 
   return (
-    <section ref={ref} className="py-20 px-4 max-w-6xl mx-auto">
-      <motion.div
-        className="text-center mb-16"
-        initial={{ opacity: 0, y: 20 }}
-        animate={isInView ? { opacity: 1, y: 0 } : {}}
-        transition={{ duration: 0.6 }}
-      >
-        <h2 className="text-4xl md:text-5xl font-display font-bold mb-6 tracking-tight">
-          About <span className="text-gradient">Me</span>
-        </h2>
-        <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
-          Engineering robust systems with a focus on performance, scalability, and clean architecture
-        </p>
-      </motion.div>
+    <span 
+      onMouseEnter={scramble} 
+      className={`cursor-default inline-block ${className}`}
+    >
+      {display}
+    </span>
+  );
+};
 
-      <div className="grid md:grid-cols-2 gap-12 items-center">
-        {/* Photo */}
-        <motion.div
-          className="relative"
-          initial={{ opacity: 0, x: -50 }}
-          animate={isInView ? { opacity: 1, x: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.2 }}
-        >
-          <motion.div
-            className="glass-card p-8 hover:glow-soft transition-all duration-500"
-            whileHover={{ scale: 1.05, rotate: 1 }}
-            transition={{ duration: 0.3 }}
-          >
-            <motion.img
-              src={profilePhoto}
-              alt="Mohamed Thabet"
-              className="w-full max-w-sm mx-auto rounded-2xl shadow-elevated"
-              whileHover={{ scale: 1.05 }}
-              transition={{ duration: 0.3 }}
-            />
-          </motion.div>
-          <motion.div
-            className="absolute -top-4 -right-4 w-20 h-20 bg-gradient-primary rounded-full blur-xl opacity-30"
-            animate={{
-              scale: [1, 1.2, 1],
-              opacity: [0.3, 0.5, 0.3],
-            }}
-            transition={{
-              duration: 3,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-          />
-          <motion.div
-            className="absolute -bottom-4 -left-4 w-16 h-16 bg-accent rounded-full blur-xl opacity-30"
-            animate={{
-              scale: [1, 1.3, 1],
-              opacity: [0.3, 0.5, 0.3],
-            }}
-            transition={{
-              duration: 4,
-              repeat: Infinity,
-              ease: "easeInOut",
-              delay: 1,
-            }}
-          />
-        </motion.div>
+const About = () => {
+  const containerRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start end", "end start"]
+  });
 
-        {/* Content */}
-        <motion.div
-          className="space-y-6"
-          initial={{ opacity: 0, x: 50 }}
-          animate={isInView ? { opacity: 1, x: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.4 }}
-        >
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ delay: 0.6 }}
-          >
-            <Card className="glass-card hover:glow-soft transition-all duration-500">
-              <div className="p-6">
-                <h3 className="text-2xl font-display font-semibold mb-4 text-gradient">
-                  My Approach
-                </h3>
-                <p className="text-muted-foreground leading-relaxed mb-4">
-                  I'm a backend engineer from Egypt, specializing in building scalable APIs, 
-                  optimizing database performance, and integrating AI capabilities into production systems.
-                  My work focuses on creating the invisible infrastructure that powers modern applications.
-                </p>
-                <p className="text-muted-foreground leading-relaxed mb-4">
-                  With expertise in Laravel, Python, and AI frameworks, I've evolved from traditional 
-                  web development to architecting intelligent systems—particularly Retrieval-Augmented 
-                  Generation (RAG) architectures that combine LLMs with domain-specific knowledge.
-                </p>
-                <p className="text-muted-foreground leading-relaxed">
-                  I believe great engineering is about trade-offs: choosing the right tool, optimizing 
-                  for the constraints that matter, and writing code that's maintainable by future you. 
-                  Every system I build prioritizes performance, security, and developer experience.
-                </p>
+  const y = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
+  const opacity = useTransform(scrollYProgress, [0, 0.2, 0.9, 1], [0, 1, 1, 0]);
+
+  return (
+    <section id="about" ref={containerRef} className="py-24 px-6 md:px-12 lg:px-24 bg-background overflow-hidden relative">
+      <div className="max-w-7xl mx-auto relative z-10">
+        <span className="text-xs font-mono text-muted-foreground mb-8 block">01</span>
+        
+        <div className="grid md:grid-cols-12 gap-12 items-start">
+          {/* Large Editorial Headline */}
+          <div className="md:col-span-12 mb-8">
+            <motion.h2 
+              style={{ opacity }}
+              className="text-[12vw] md:text-[8vw] leading-[0.8] font-display font-bold tracking-tighter text-foreground/5 select-none"
+            >
+              ENGINEER
+            </motion.h2>
+          </div>
+
+          {/* Photo Column */}
+          <div className="md:col-span-5 relative group">
+            <motion.div style={{ y }} className="relative z-10">
+              <div className="aspect-[3/4] overflow-hidden rounded-sm bg-secondary/20">
+                <img
+                  src={profilePhoto}
+                  alt="Mohamed Thabet"
+                  className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 scale-105 group-hover:scale-100"
+                />
               </div>
-            </Card>
-          </motion.div>
+            </motion.div>
+            
+            {/* Decorative elements */}
+            <div className="absolute -bottom-6 -right-6 w-24 h-24 border border-foreground/20 rounded-full animate-spin-slow hidden md:block" />
+            <div className="absolute -top-6 -left-6 w-full h-full border border-border z-0 hidden md:block" />
+          </div>
 
-          {/* Values */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ delay: 0.8 }}
-          >
-            <Card className="glass-card hover:glow-soft transition-all duration-500">
-            <div className="p-6">
-              <h3 className="text-xl font-semibold mb-4">Focus Areas</h3>
-              <div className="space-y-3 mb-4">
-                <div className="flex items-start gap-3">
-                  <div className="w-2 h-2 bg-primary rounded-full mt-2"></div>
-                  <div>
-                    <p className="font-medium text-sm">AI-Powered APIs</p>
-                    <p className="text-xs text-muted-foreground">RAG systems, LangChain integration, vector search</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <div className="w-2 h-2 bg-accent rounded-full mt-2"></div>
-                  <div>
-                    <p className="font-medium text-sm">Backend Architecture</p>
-                    <p className="text-xs text-muted-foreground">Laravel, FastAPI, REST/GraphQL APIs, microservices</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <div className="w-2 h-2 bg-primary rounded-full mt-2"></div>
-                  <div>
-                    <p className="font-medium text-sm">Performance Engineering</p>
-                    <p className="text-xs text-muted-foreground">Database optimization, caching strategies, query tuning</p>
-                  </div>
-                </div>
-              </div>
+          {/* Content Column */}
+          <div className="md:col-span-7 space-y-12 pt-8 md:pl-12">
+            <div className="space-y-8">
+              <h3 className="text-3xl md:text-4xl font-display font-bold leading-tight">
+                Architecting the <br />
+                <span className="text-muted-foreground">invisible infrastructure.</span>
+              </h3>
               
-              <h3 className="text-lg font-semibold mb-3 mt-6">Core Values</h3>
-              <div className="flex flex-wrap gap-2">
-                <Badge
-                  variant="outline"
-                  className="glass border-primary/30 text-primary hover:scale-105 transition-transform duration-200"
-                >
-                  Performance
-                </Badge>
-                <Badge
-                  variant="outline"
-                  className="glass border-primary/30 text-primary hover:scale-105 transition-transform duration-200"
-                >
-                  Scalability
-                </Badge>
-                <Badge
-                  variant="outline"
-                  className="glass border-primary/30 text-primary hover:scale-105 transition-transform duration-200"
-                >
-                  Security
-                </Badge>
-                <Badge
-                  variant="outline"
-                  className="glass border-accent/30 text-accent hover:scale-105 transition-transform duration-200"
-                >
-                  Maintainability
-                </Badge>
-                <Badge
-                  variant="outline"
-                  className="glass border-accent/30 text-accent hover:scale-105 transition-transform duration-200"
-                >
-                  DX Focus
-                </Badge>
+              <div className="space-y-6 text-lg text-muted-foreground font-light leading-relaxed">
+                <p>
+                  <span className="text-foreground font-medium text-xl">I</span>'m a backend engineer from Egypt, but I like to think of myself as a digital architect. I don't just write code; I design the structural integrity of applications.
+                </p>
+                <p>
+                  My journey evolved from traditional web development to the bleeding edge of AI integration. I specialize in **Retrieval-Augmented Generation (RAG)**—teaching machines to understand and act on your specific data.
+                </p>
+                <p>
+                  I believe in "boring" technology for critical infrastructure and "exciting" technology for user capabilities. Stability meets intelligence.
+                </p>
               </div>
             </div>
-          </Card>
-          </motion.div>
-        </motion.div>
+
+            <div className="grid grid-cols-2 gap-8 border-t border-border/50 pt-8">
+              <div>
+                <h4 className="text-sm font-mono uppercase tracking-wider mb-4 text-foreground">Stack</h4>
+                <ul className="space-y-2 text-sm text-muted-foreground">
+                  <li><ScrambleText text="Laravel / PHP" /></li>
+                  <li><ScrambleText text="Python / FastAPI" /></li>
+                  <li><ScrambleText text="React / Inertia.js" /></li>
+                  <li><ScrambleText text="PostgreSQL / Redis" /></li>
+                </ul>
+              </div>
+              <div>
+                <h4 className="text-sm font-mono uppercase tracking-wider mb-4 text-foreground">Focus</h4>
+                <ul className="space-y-2 text-sm text-muted-foreground">
+                  <li><ScrambleText text="RAG Systems" /></li>
+                  <li><ScrambleText text="API Architecture" /></li>
+                  <li><ScrambleText text="Performance Tuning" /></li>
+                  <li><ScrambleText text="System Design" /></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );
